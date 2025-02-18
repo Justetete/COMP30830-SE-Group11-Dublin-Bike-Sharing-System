@@ -1,5 +1,6 @@
-USER = 'mark'
-PASSWORD = 'Johndeere10!'
+# set up my local database
+USER = 'root'
+PASSWORD = 'Just1996'
 PORT = '3306'
-DB = 'database-download-jc-decaux'
-URI = 'database-download-jc-decaux.cp42yssukjwp.eu-west-1.rds.amazonaws.com'
+DB = 'local_db_jcdecaux'
+URI = '127.0.0.1'
