@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+
+h1, h2{
+    color: #007bff;
+}
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.header{
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    background-color: lightblue;
+    border: solid;
+    border-radius:25px;
+    border-color:black ;
+    font-size: 30px;
+}
+
+.header h1{
+    color: black;
+}
+.flex-item {
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .weather-map{
+    float:right;
+  }
+  .weather-box{
+    border: solid;
+    border-radius:25px;
+    border-color:black ;
+    width:750px;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .weather-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around
+  }
+
+  .map{
+    margin-top: 30px;
+    border: solid;
+    border-radius:25px;
+    border-color:black ;
+    width:750px;
+    height: 500px
+  }
+
+.bike-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    border: solid;
+    border-radius:25px;
+    border-color:black;
+}
+
+.bike-header h1{
+    font-size: 40px;
+}
+
+.bike-details li {
+    margin: 20px 0;
+    list-style-type: none;
+    font-size: 20px;
+}
+
+
+.bike-details{
+    margin-right:30px;
+}
+
+
+#map {
+    height: 400px;
+    width: 100%;
+    border-style: solid;
+    border-color: black;
+    border-radius: 25px;
+    margin-top: 20px;
+}

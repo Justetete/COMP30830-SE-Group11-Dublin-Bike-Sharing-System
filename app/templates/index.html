@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- To scale based on the device -->
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- This is resolved by Flask -->
+</head>
+<body>
+    <div class="header">
+        <img class="flex-item"src="static/imgs/logo.png">
+            <h1 class="flex-item">Dublin Bikes</h1>
+
+    </div>
+
+    <h1>Welcome to {{ title }}</h1>
+    <p>This is the homepage of the Flask app.</p>
+
+
+    <div class="weather-map">
+        <div class="weather-box">
+            <h1>Weather</h1>
+                <div class="weather-info">
+                    <h2>Temp: {{ temp }}°C</h2>
+                    <h2>Wind: {{ wind_speed }} m/s</h2>
+                    <h2>Cond: {{ weather_main }}</h2>
+                </div>
+        </div>
+
+
+    
+    
+        <div id="map"></div>
+
+        
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuYhHbAe7sJjIaVw8NL-pSHacXpH3cv1U&callback=initMap" async defer></script>
+    
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+    <div class="bike-info">
+        <div class="bike-header">
+            <h1>Station No.{{stations.number}}</h1>
+        </div>
+        <div class="bike-details">
+            <ul class="bike-details">
+            <li><strong>Address:</strong> {{ stations.address }}</li>
+            <li><strong>Total Bikes:</strong> {{ stations.bike_stands }}</li>
+            <li><strong>Available Bikes:</strong> {{ stations.available_bikes }}</li>
+            <li><strong>Available Stands:</strong> {{ stations.available_bike_stands }}</li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <!--
+    Using url_for:
+    When you call url_for('about'), Flask looks for a route that corresponds to the about view function.
+    It then generates the correct URL for that route, which in this case is /about.
+    -->
+
+
+
+    
+  
+</body>
+</html>
