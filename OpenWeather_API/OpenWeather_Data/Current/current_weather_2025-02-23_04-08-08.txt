@@ -1,0 +1,24 @@
+{
+    "dt": 1740283688,
+    "sunrise": 1740295573,
+    "sunset": 1740333053,
+    "temp": 11.72,
+    "feels_like": 10.75,
+    "pressure": 1008,
+    "humidity": 69,
+    "dew_point": 6.23,
+    "uvi": 0,
+    "clouds": 75,
+    "visibility": 10000,
+    "wind_speed": 9.77,
+    "wind_deg": 180,
+    "wind_gust": 16.46,
+    "weather": [
+        {
+            "id": 803,
+            "main": "Clouds",
+            "description": "broken clouds",
+            "icon": "04n"
+        }
+    ]
+}

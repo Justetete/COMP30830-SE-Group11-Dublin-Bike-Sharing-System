@@ -1,0 +1,23 @@
+{
+    "dt": 1740092872,
+    "sunrise": 1740036766,
+    "sunset": 1740073504,
+    "temp": 12.69,
+    "feels_like": 11.97,
+    "pressure": 1003,
+    "humidity": 75,
+    "dew_point": 8.38,
+    "uvi": 0,
+    "clouds": 40,
+    "visibility": 10000,
+    "wind_speed": 7.72,
+    "wind_deg": 180,
+    "weather": [
+        {
+            "id": 802,
+            "main": "Clouds",
+            "description": "scattered clouds",
+            "icon": "03n"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "dt": 1740301689,
+    "sunrise": 1740295573,
+    "sunset": 1740333053,
+    "temp": 11.69,
+    "feels_like": 11.06,
+    "pressure": 1001,
+    "humidity": 82,
+    "dew_point": 8.72,
+    "uvi": 0.06,
+    "clouds": 75,
+    "visibility": 10000,
+    "wind_speed": 9.39,
+    "wind_deg": 160,
+    "weather": [
+        {
+            "id": 500,
+            "main": "Rain",
+            "description": "light rain",
+            "icon": "10d"
+        }
+    ],
+    "rain": {
+        "1h": 0.87
+    }
+}

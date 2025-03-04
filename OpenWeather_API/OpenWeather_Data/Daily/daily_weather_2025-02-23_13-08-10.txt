@@ -1,0 +1,326 @@
+[
+    {
+        "dt": 1740312000,
+        "sunrise": 1740295573,
+        "sunset": 1740333053,
+        "moonrise": 1740289080,
+        "moonset": 1740310320,
+        "moon_phase": 0.84,
+        "summary": "Expect a day of partly cloudy with rain",
+        "temp": {
+            "day": 13.28,
+            "min": 7.39,
+            "max": 13.58,
+            "night": 8.63,
+            "eve": 10.25,
+            "morn": 9.59
+        },
+        "feels_like": {
+            "day": 12.88,
+            "night": 4.88,
+            "eve": 9.42,
+            "morn": 5.29
+        },
+        "pressure": 999,
+        "humidity": 85,
+        "dew_point": 10.81,
+        "wind_speed": 11.91,
+        "wind_deg": 183,
+        "wind_gust": 24.2,
+        "weather": [
+            {
+                "id": 501,
+                "main": "Rain",
+                "description": "moderate rain",
+                "icon": "10d"
+            }
+        ],
+        "clouds": 80,
+        "pop": 1,
+        "rain": 7.82,
+        "uvi": 0.53
+    },
+    {
+        "dt": 1740398400,
+        "sunrise": 1740381839,
+        "sunset": 1740419569,
+        "moonrise": 1740378000,
+        "moonset": 1740401220,
+        "moon_phase": 0.87,
+        "summary": "Expect a day of partly cloudy with rain",
+        "temp": {
+            "day": 10.1,
+            "min": 4.69,
+            "max": 10.77,
+            "night": 4.69,
+            "eve": 7.42,
+            "morn": 7.17
+        },
+        "feels_like": {
+            "day": 8.89,
+            "night": 0.37,
+            "eve": 4.18,
+            "morn": 3.86
+        },
+        "pressure": 1007,
+        "humidity": 66,
+        "dew_point": 3.68,
+        "wind_speed": 7.67,
+        "wind_deg": 231,
+        "wind_gust": 15.72,
+        "weather": [
+            {
+                "id": 500,
+                "main": "Rain",
+                "description": "light rain",
+                "icon": "10d"
+            }
+        ],
+        "clouds": 40,
+        "pop": 1,
+        "rain": 0.76,
+        "uvi": 1.19
+    },
+    {
+        "dt": 1740484800,
+        "sunrise": 1740468105,
+        "sunset": 1740506085,
+        "moonrise": 1740466200,
+        "moonset": 1740492840,
+        "moon_phase": 0.91,
+        "summary": "The day will start with clear sky through the late morning hours, transitioning to partly cloudy",
+        "temp": {
+            "day": 8.17,
+            "min": 3.09,
+            "max": 8.37,
+            "night": 3.09,
+            "eve": 4.9,
+            "morn": 3.38
+        },
+        "feels_like": {
+            "day": 4.99,
+            "night": -0.28,
+            "eve": 1.57,
+            "morn": -0.61
+        },
+        "pressure": 1015,
+        "humidity": 68,
+        "dew_point": 2.31,
+        "wind_speed": 6.54,
+        "wind_deg": 242,
+        "wind_gust": 13.63,
+        "weather": [
+            {
+                "id": 802,
+                "main": "Clouds",
+                "description": "scattered clouds",
+                "icon": "03d"
+            }
+        ],
+        "clouds": 35,
+        "pop": 0.37,
+        "uvi": 1.06
+    },
+    {
+        "dt": 1740571200,
+        "sunrise": 1740554370,
+        "sunset": 1740592600,
+        "moonrise": 1740553800,
+        "moonset": 1740584820,
+        "moon_phase": 0.94,
+        "summary": "Expect a day of partly cloudy with rain",
+        "temp": {
+            "day": 5.86,
+            "min": 1.85,
+            "max": 6.62,
+            "night": 1.85,
+            "eve": 4.31,
+            "morn": 6.62
+        },
+        "feels_like": {
+            "day": 3.32,
+            "night": -1.33,
+            "eve": 1.07,
+            "morn": 3.38
+        },
+        "pressure": 1014,
+        "humidity": 92,
+        "dew_point": 4.18,
+        "wind_speed": 4.96,
+        "wind_deg": 228,
+        "wind_gust": 10.63,
+        "weather": [
+            {
+                "id": 501,
+                "main": "Rain",
+                "description": "moderate rain",
+                "icon": "10d"
+            }
+        ],
+        "clouds": 100,
+        "pop": 1,
+        "rain": 5.82,
+        "uvi": 0.25
+    },
+    {
+        "dt": 1740657600,
+        "sunrise": 1740640634,
+        "sunset": 1740679115,
+        "moonrise": 1740641040,
+        "moonset": 1740676860,
+        "moon_phase": 0.98,
+        "summary": "There will be clear sky until morning, then partly cloudy",
+        "temp": {
+            "day": 7.19,
+            "min": 0.3,
+            "max": 8.49,
+            "night": 2.92,
+            "eve": 4.59,
+            "morn": 0.35
+        },
+        "feels_like": {
+            "day": 4.57,
+            "night": 0.15,
+            "eve": 2.46,
+            "morn": -3.82
+        },
+        "pressure": 1026,
+        "humidity": 74,
+        "dew_point": 2.51,
+        "wind_speed": 4.08,
+        "wind_deg": 269,
+        "wind_gust": 7.32,
+        "weather": [
+            {
+                "id": 803,
+                "main": "Clouds",
+                "description": "broken clouds",
+                "icon": "04d"
+            }
+        ],
+        "clouds": 55,
+        "pop": 0,
+        "uvi": 1.49
+    },
+    {
+        "dt": 1740744000,
+        "sunrise": 1740726897,
+        "sunset": 1740765630,
+        "moonrise": 1740728160,
+        "moonset": 1740768780,
+        "moon_phase": 0,
+        "summary": "There will be partly cloudy today",
+        "temp": {
+            "day": 8.56,
+            "min": 2.16,
+            "max": 9.18,
+            "night": 6.25,
+            "eve": 6.51,
+            "morn": 2.7
+        },
+        "feels_like": {
+            "day": 5.67,
+            "night": 2.66,
+            "eve": 3.2,
+            "morn": 0.42
+        },
+        "pressure": 1022,
+        "humidity": 60,
+        "dew_point": 0.92,
+        "wind_speed": 5.55,
+        "wind_deg": 182,
+        "wind_gust": 12.27,
+        "weather": [
+            {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04d"
+            }
+        ],
+        "clouds": 100,
+        "pop": 0,
+        "uvi": 2
+    },
+    {
+        "dt": 1740830400,
+        "sunrise": 1740813160,
+        "sunset": 1740852144,
+        "moonrise": 1740815160,
+        "moonset": 1740860700,
+        "moon_phase": 0.06,
+        "summary": "Expect a day of partly cloudy with rain",
+        "temp": {
+            "day": 8.28,
+            "min": 3.64,
+            "max": 9.16,
+            "night": 3.64,
+            "eve": 6.44,
+            "morn": 5.26
+        },
+        "feels_like": {
+            "day": 5.22,
+            "night": 0.69,
+            "eve": 4.56,
+            "morn": 1.7
+        },
+        "pressure": 1029,
+        "humidity": 57,
+        "dew_point": -0.04,
+        "wind_speed": 5.56,
+        "wind_deg": 320,
+        "wind_gust": 12.92,
+        "weather": [
+            {
+                "id": 500,
+                "main": "Rain",
+                "description": "light rain",
+                "icon": "10d"
+            }
+        ],
+        "clouds": 53,
+        "pop": 1,
+        "rain": 1.11,
+        "uvi": 2
+    },
+    {
+        "dt": 1740916800,
+        "sunrise": 1740899421,
+        "sunset": 1740938658,
+        "moonrise": 1740902160,
+        "moonset": 1740952680,
+        "moon_phase": 0.09,
+        "summary": "There will be partly cloudy today",
+        "temp": {
+            "day": 10.47,
+            "min": 3.41,
+            "max": 12.08,
+            "night": 8.74,
+            "eve": 9.85,
+            "morn": 5.39
+        },
+        "feels_like": {
+            "day": 9.43,
+            "night": 5.31,
+            "eve": 7,
+            "morn": 1.25
+        },
+        "pressure": 1028,
+        "humidity": 71,
+        "dew_point": 5.06,
+        "wind_speed": 7.04,
+        "wind_deg": 249,
+        "wind_gust": 15.24,
+        "weather": [
+            {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04d"
+            }
+        ],
+        "clouds": 90,
+        "pop": 0,
+        "uvi": 2
+    }
+]

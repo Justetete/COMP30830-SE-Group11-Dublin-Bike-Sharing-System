@@ -1,0 +1,24 @@
+{
+    "dt": 1740337691,
+    "sunrise": 1740295573,
+    "sunset": 1740333053,
+    "temp": 11.53,
+    "feels_like": 10.88,
+    "pressure": 1000,
+    "humidity": 82,
+    "dew_point": 8.57,
+    "uvi": 0,
+    "clouds": 20,
+    "visibility": 10000,
+    "wind_speed": 8.75,
+    "wind_deg": 210,
+    "wind_gust": 14.92,
+    "weather": [
+        {
+            "id": 801,
+            "main": "Clouds",
+            "description": "few clouds",
+            "icon": "02n"
+        }
+    ]
+}
