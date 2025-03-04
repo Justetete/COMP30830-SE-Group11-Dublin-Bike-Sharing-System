@@ -13,7 +13,7 @@ JCDECAUX_API_KEY = "1bee4dcd68c8e76a61647efcc43b3e68a55cacaf"
 OPENWEATHER_API_KEY = "5361004f3b8168405f9c7f15918a4186"
 CONTRACT = "dublin"  # Change to your city
 
-#OPENWEATHER_API_KEY = "your_actual_openweather_api_key"
+
 BIKE_API_URL = "https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey=1bee4dcd68c8e76a61647efcc43b3e68a55cacaf"
 
 
