@@ -1,0 +1,9 @@
+OpenWeather_API/
+.DS_Store
+JCD_API_Info.py
+JCD_DB_Info.py
+JCDecaux_API.py
+JCDecaux_DB.py
+JCDecauxAPI_to_DB.py
+README.md
+
