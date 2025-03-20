@@ -16,8 +16,11 @@ app = Flask(__name__)  # Create a Flask web application instance
 with open("config.json") as config_file:
     config = json.load(config_file)
 
+
+
 JCDECAUX_API_KEY = config["JCDECAUX_API_KEY"]
 OPENWEATHER_API_KEY = config["OPENWEATHER_API_KEY"]
+GOOGLE_MAPS_API_KEY = config["GOOGLE_MAPS_API_KEY"]
 
 # City contract name for JCDecaux bike-sharing API
 CONTRACT = "dublin"
@@ -46,7 +49,7 @@ def home():
     bike_stations = requests.get(BIKE_API_URL).json()
 
     # Render the homepage template and pass the station data to it
-    return render_template("index.html", title="Dublin Bikes", stations=bike_stations)
+    return render_template("index.html", title="Dublin Bikes", stations=bike_stations, google_maps_api_key=GOOGLE_MAPS_API_KEY)
 
 
 @app.route("/api/weather")
@@ -105,7 +108,4 @@ if __name__ == "__main__":
 
 
 # ============================== #
-
-
-
 
