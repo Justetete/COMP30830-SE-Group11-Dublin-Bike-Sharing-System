@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+
+<body>
+
+  <div class="header">
+    <img class="flex-item" src="static/imgs/logo.png">
+    <h1 class="flex-item">Dublin Bikes</h1>
+</div>
+
+
+  <div class="loginbody">
+  <div class="auth-container">
+    <h1>Welcome to Dublin Bikes</h1>
+    <h2 class="auth-title">Login</h2>
+    <form id="login-form">
+      <input type="email" id="login-email" class="auth-input" placeholder="Email" required autocomplete="email">
+      <input type="password" id="login-password" class="auth-input" placeholder="Password" required autocomplete="current-password">
+      <button type="submit" id="login-btn" class="auth-button">Login</button>
+    </form>
+    <p id="login-error-message" class="error-message"></p>
+    <hr class="auth-divider">
+    <p class="signup-text">Don't have an account? <a href="{{ url_for('signup') }}" class="signup-link">Sign Up</a></p>
+  </div>
+
+</div>
+
+  <!-- Firebase SDK (module version) -->
+  <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+</body>
+</html>
