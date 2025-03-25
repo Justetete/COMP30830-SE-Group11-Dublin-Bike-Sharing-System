@@ -7,26 +7,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    
     <div class="header">
         <img class="flex-item" src="static/imgs/logo.png">
         <h1 class="flex-item">Dublin Bikes</h1>
+        <button class="logout-button flex-item" onclick="logout()">Logout</button>
     </div>
 
     <h1>Welcome to {{ title }}</h1>
+    <h1>Welcome, {{ first_name }}!</h1>
     <p>This is the homepage of the Flask app.</p>
 
     <div class="weather-map">
         <div class="weather-box">
             <h1>Weather</h1>
             <div class="weather-info">
-                <!-- These will be dynamically updated by JavaScript -->
                 <h2>Temp: <span id="temp-here"></span></h2> 
                 <h2>Wind: <span id="wind-here"></span></h2>
                 <h2>Cond: <span id="cond-here"></span></h2>
             </div>
         </div>
-         <!-- The JavaScript will desplay the Google map in here -->
         <div id="map"></div>
     </div>
 
@@ -36,7 +35,6 @@
         </div>
         <div class="bike-details">
             <ul class="bike-details">
-                <!-- These will be dynamically updated when a marker is clicked -->
                 <li><strong>Address:</strong> <span id="station-address"></span></li>
                 <li><strong>Total Bikes:</strong> <span id="station-total-bikes"></span></li>
                 <li><strong>Available Bikes:</strong> <span id="station-available-bikes"></span></li>
@@ -45,12 +43,18 @@
         </div>
     </div>
 
-    <!-- Links the Google Map API onto webpage-->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
-<!--<script src="{{ url_for('static', filename='script.js') }}"></script>>-->
-<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+   <!-- <script>
+        function logout() {
+            fetch("/logout")
+                .then(() => window.location.href = "/login");
+        }
+    </script>-->
 
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
 </html>
+
 
