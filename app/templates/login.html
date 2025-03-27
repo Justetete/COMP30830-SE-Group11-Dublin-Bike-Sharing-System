@@ -4,36 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Login</title>
+  
+  <!-- Link to external stylesheet -->
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
-
 <body>
-
-  <div class="header">
-    <img class="flex-item" src="static/imgs/logo.png">
+  <!-- Header Section -->
+  <header class="header">
+    <img class="flex-item" src="static/imgs/logo.png" alt="Dublin Bikes Logo">
     <h1 class="flex-item">Dublin Bikes</h1>
-</div>
+  </header>
 
+  <!-- Login Form Container -->
+  <main class="login-body">
+    <div class="auth-container">
+      <h1>Welcome to Dublin Bikes</h1>
+      <h2 class="auth-title">Login</h2>
+      
+      <!-- Login Form -->
+      <form id="login-form">
+        <input type="email" id="login-email" class="auth-input" placeholder="Email" required autocomplete="email">
+        <input type="password" id="login-password" class="auth-input" placeholder="Password" required autocomplete="current-password">
+        <button type="submit" id="login-btn" class="auth-button">Login</button>
+      </form>
+      
+      <!-- Error Message Display -->
+      <p id="login-error-message" class="error-message"></p>
+      
+      <hr class="auth-divider">
+      
+      <!-- Signup Redirect -->
+      <p class="signup-text">Don't have an account? 
+        <a href="{{ url_for('signup') }}" class="signup-link">Sign Up</a>
+      </p>
+    </div>
+  </main>
 
-  <div class="loginbody">
-  <div class="auth-container">
-    <h1>Welcome to Dublin Bikes</h1>
-    <h2 class="auth-title">Login</h2>
-    <form id="login-form">
-      <input type="email" id="login-email" class="auth-input" placeholder="Email" required autocomplete="email">
-      <input type="password" id="login-password" class="auth-input" placeholder="Password" required autocomplete="current-password">
-      <button type="submit" id="login-btn" class="auth-button">Login</button>
-    </form>
-    <p id="login-error-message" class="error-message"></p>
-    <hr class="auth-divider">
-    <p class="signup-text">Don't have an account? <a href="{{ url_for('signup') }}" class="signup-link">Sign Up</a></p>
-  </div>
-
-</div>
-
-  <!-- Firebase SDK (module version) -->
+  <!-- Firebase Authentication Script -->
   <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
-
 </body>
 </html>
