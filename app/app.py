@@ -127,7 +127,7 @@ def verify_login():
         decoded_token = auth.verify_id_token(id_token)
         user_id = decoded_token["uid"]
 
-        # ✅ Store session
+        # Store session
         session["user"] = user_id  
 
         return jsonify({"success": True, "user_id": user_id})
