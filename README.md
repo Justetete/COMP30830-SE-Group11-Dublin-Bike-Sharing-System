@@ -82,7 +82,7 @@ cd backend
 # Create a virtual environment
 python -m venv venv
 
-# Activate the virtual environment on Linux/Mac
+# Activate the virtual environment on Mac
 source venv/bin/activate
 
 # If you're on Windows, use this command instead:
