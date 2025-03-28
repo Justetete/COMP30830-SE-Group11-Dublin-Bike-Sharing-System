@@ -66,9 +66,3 @@ window.logout = function () {
         })
         .catch(error => console.error("Error logging out:", error));
 };
-
-
- * by the Google Maps API after the script loads.
- */
-window.initMap = initMap;
-
