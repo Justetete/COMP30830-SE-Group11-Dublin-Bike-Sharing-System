@@ -1,4 +1,5 @@
 # Ignore sensitive files
 config.json
-dublin-bikes-bc821-firebase-adminsdk-fbsvc-*.json
 .env
+settings.ini
+dublin-bikes-bc821-firebase-adminsdk-fbsvc-*.json
