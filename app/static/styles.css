@@ -128,7 +128,7 @@ h1, h2 {
 
 
 
-/*login*/
+/*   ------- login -------   */
 
 /* General styles */
 .loginbody {
@@ -214,7 +214,7 @@ h1, h2 {
 
 
 
-/*sign up*/
+/*   ------- sign up -------   */
 
 
 /* Body Styling */
@@ -299,6 +299,3 @@ h1, h2 {
 .login-link:hover {
     text-decoration: underline;
 }
-
-
-
