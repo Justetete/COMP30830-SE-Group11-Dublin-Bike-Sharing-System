@@ -5,4 +5,6 @@ settings.ini
 dublin-bikes-bc821-firebase-adminsdk-fbsvc-*.json
 JCD_API_Info.py
 JCD_DB_Info.py
+OpenWeather_API_Info.py
 firebase-config.js
+.DS_Store
