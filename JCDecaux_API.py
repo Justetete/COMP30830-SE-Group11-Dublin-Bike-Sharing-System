@@ -32,11 +32,6 @@ def write_to_txtfile(text):
     with open(file_path, "w") as f:
         f.write(text)
 
-# Below is a function that will write this data to the AWS RDS
-# For now, it is redundant
-def write_to_db(text):
-    return 0
-
 # Main code
 def main():
     # In an infinite loop, every 5mins get the API data and insert it into a text file
