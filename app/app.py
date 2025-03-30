@@ -4,6 +4,8 @@ import json
 import requests
 import firebase_admin
 import os
+import pandas as pd
+from datetime import datetime
 from firebase_admin import credentials, auth
 
 # Initialize Flask app
@@ -54,6 +56,56 @@ def dashboard():
     first_name = session.get("first_name", "User")
     bike_stations = fetch_bike_stations()
     return render_template("index.html", title="Dublin Bikes", stations=bike_stations, google_maps_api_key=GOOGLE_MAPS_API_KEY, first_name=first_name)
+
+# test to draw historical timeseirs data / We can change this function in Sprint 4.
+# Load history data once at server startup
+# history_station data based on one group of 2023 csc (https://github.com/ZhaoYuxin1211/bikerbyte/tree/main/model)
+HISTORY_DF = pd.read_csv("history_station.csv")
+
+@app.route("/api/history_data")
+def get_history_data():
+    station_id = request.args.get("station_id")
+    date_str = request.args.get("date") 
+
+    if not station_id:
+        return jsonify({"error": "Missing station_id"}), 400
+
+    station_id = int(station_id)
+    station_df = HISTORY_DF[HISTORY_DF["number"] == station_id].copy()
+    station_df["datetime"] = pd.to_datetime(station_df["update_date"], unit="ms")
+
+    if date_str:
+        selected_date = pd.to_datetime(date_str).date()
+    else:
+        selected_date = station_df["datetime"].dt.date.max()
+
+    one_day_df = station_df[station_df["datetime"].dt.date == selected_date]
+    one_day_df = one_day_df.sort_values("datetime")
+
+    result = []
+    for _, row in one_day_df.iterrows():
+        result.append({
+            "time": row["datetime"].strftime("%Y-%m-%dT%H:%M:%S"),
+            "bikes": row["available_bikes"],
+            "stands": row["available_bike_stands"]
+        })
+
+    return jsonify(result)
+
+@app.route("/api/history_dates")
+def get_history_dates():
+    station_id = request.args.get("station_id")
+    if not station_id:
+        return jsonify({"error": "Missing station_id"}), 400
+
+    station_id = int(station_id)
+    station_df = HISTORY_DF[HISTORY_DF["number"] == station_id].copy()
+    station_df["datetime"] = pd.to_datetime(station_df["update_date"], unit="ms")
+    unique_dates = sorted(station_df["datetime"].dt.date.unique(), reverse=True)
+
+    # Convert to string list like '2023-04-05'
+    result = [date.isoformat() for date in unique_dates]
+    return jsonify(result)
 
 @app.route("/login")
 def login():

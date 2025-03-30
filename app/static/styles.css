@@ -1,220 +1,216 @@
+/*------------------------------dashboard-----------------------*/
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f9f9f9;
+    background-color: #FAF7E8;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+/* navbar style*/
+
+.custom-navbar {
+background-color: #FAF7E8;
+border-bottom: 1px solid #ddd;
+}
+
+.logo-img {
+height: 40px;
+}
+
+.system-title {
+font-size: 20px;
+color: #187a3c;
+letter-spacing: 1px;
+}
+
+.login-btn {
+background-color: #FF9933;
+color: #fff;
+border-radius: 6px;
+padding: 6px 16px;
+font-weight: 500;
+}
+
+.login-btn:hover {
+background-color: #e67f1e;
+}
+
+/* main container*/
+
+.container-fluid, .row {
+    height: 100vh;
+    }
+
+.col-md-2 {
+    padding-left: 0;
+}
+
+.col-md-10 {
+    padding-right: 0;
+}
+
+.weather-card {
+background-color: #a8d5ba;
+color: #187a3c;
+border: none;
+}
+
+.station-info-card {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     color: #333;
-}
-
-h1, h2 {
-    color: #007bff;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: lightblue;
-    border: solid;
-    border-radius: 25px;
-    border-color: black;
-    font-size: 30px;
-}
-
-.header h1 {
-    color: black;
-}
-
-.flex-item {
-    padding: 20px;
-    margin: 10px;
-    text-align: center;
-}
-
-.weather-map {
-    display: flex;
-    flex-direction: column; /* Stack weather and map vertically */
-    align-items: center; /* Center the content horizontally */
-}
-
-.weather-box {
-    border: solid;
-    border-radius: 25px;
-    border-color: black;
-    width: 750px;
-    text-align: center;
-    margin-top: 50px;
-}
-
-.weather-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
+  }
+  .bike-info ul {
+    padding-left: 18px;
+    list-style-type: disc;
+  }
+  
 
 #map {
-    height: 500px;
-    width: 100%;
-    border-style: solid;
-    border-color: black;
-    border-radius: 25px;
-    margin-top: 20px;
+height: 100%;
+width: 100%;
+background-color: #e6f4ec;
+border: 1px solid #ccc;
+border-radius: 8px;
 }
 
-.bike-info {
-    border-radius: 25px;
-    border-color: black;
-    border-style: solid;
-    width: 300px;
-    text-align: center;
-    margin-top: 20px; /* Add space between map and bike info */
-    margin-left: auto;
-    margin-right: auto; /* Centers the bike info section */
+.plot-card {
+background-color: #ffffff;
+border: 1px solid #ddd;
 }
 
-.bike-info ul {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
+.custom-info-window {
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    font-size: 14px;
+  }
+  
+.custom-info-window h6 {
+margin: 0 0 4px 0;
+font-size: 15px;
+font-weight: 600;
+color: #187a3c;
+display: flex;
+align-items: center;
 }
 
-.bike-info ul li {
-    margin-left: 0;
-    margin-bottom: 8px;
+.status-badge {
+background-color: #187a3c;
+color: white;
+border-radius: 6px;
+padding: 2px 6px;
+font-size: 12px;
+margin-left: auto;
 }
 
-.bike-details li {
-    margin-top: 10px;
-    margin-left: -10px;
+.marker-icon {
+margin-right: 6px;
+font-size: 16px;
 }
 
-
-.info-window-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center horizontally */
-    text-align: center;  /* Center text */
-}
-
-.info-window-content h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.info-window-content ul {
-    padding-left: 0;
-    list-style-type: none;
-}
-
-.info-window-content ul li {
-    margin-bottom: 8px;
-}
-
-
-.logout-button {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-left: 20px;
-}
-
-.logout-button:hover {
-    background-color: #007bff;
-}
-
-
-
-/*   ------- login -------   */
-
-/* General styles */
-.loginbody {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    margin-top: 100px;
-    height: 500px;
-
-}
-
-/* Authentication container */
-.auth-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* station-plot style*/
+.station-plot-panel {
+    position: fixed;
+    top: 50px; 
+    right: -350px;
     width: 320px;
-    text-align: center;
-    border-style: solid;
+    background-color: #ffffff;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    z-index: 9999;
+    padding: 20px;
+    border-left: 3px solid #187a3c;
+    border-radius: 8px 0 0 8px;
+  }
+  
+.station-plot-panel.active {
+right: 0;
 }
 
-/* Title */
-.auth-title {
-    color: #007bff;
+.panel-content h5 {
+    color: #187a3c;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
 }
 
-/* Input fields */
-.auth-input {
+.panel-content h6 {
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 16px;
+  }
+
+.station-plot-panel .panel-content {
+    padding-top: 8px
+  }
+  
+
+
+/* defualt: hide the colse-button in google map when mouse hover on a station */
+.gm-ui-hover-effect {
+    display: none !important;
+  }
+  
+/*------------------------------login--------------------------*/
+.auth-body {
+    background-color: #FAF7E8;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .auth-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2rem;
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-/* Buttons */
-.auth-button {
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
+    max-width: 400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo-img {
+    height: 40px;
+  }
+  
+  .system-title {
+    font-size: 22px;
+    color: #187a3c;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+  
+  .login-btn {
+    background-color: #FF9933;
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.auth-button:hover {
-    background-color: #0056b3;
-}
-
-/* Error messages */
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* Separator */
-.auth-divider {
-    margin: 15px 0;
-    border: 0;
-    height: 1px;
-    background: #ddd;
-}
-
-/* Signup text */
-.signup-text {
-    font-size: 14px;
-}
-
-.signup-link {
-    color: #007bff;
+  }
+  
+  .login-btn:hover {
+    background-color: #e67f1e;
+  }
+  
+  .signup-link {
+    color: #187a3c;
+    font-weight: 500;
     text-decoration: none;
-}
-
-.signup-link:hover {
+  }
+  
+  .signup-link:hover {
     text-decoration: underline;
-}
+  }
+  
 
 
-
-/*   ------- sign up -------   */
+/*sign up*/
 
 
 /* Body Styling */
@@ -299,3 +295,7 @@ h1, h2 {
 .login-link:hover {
     text-decoration: underline;
 }
+
+
+
+

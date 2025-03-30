@@ -1,3 +1,5 @@
+import { showPlotPanel, closePlotPanel } from './stationPlot.js';
+
 // Declare the map variable globally so it can be accessed throughout the script
 export let map;
 let infoWindow; // Holds an instance of the InfoWindow for displaying bike station details
@@ -10,7 +12,7 @@ export function initMap() {
     // Create a new Google Map instance centered on Dublin, Ireland
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 53.349805, lng: -6.26031 }, // Set initial center point (Dublin)
-        zoom: 12 // Set default zoom level
+        zoom: 13 // Set default zoom level
     });
 
     // Create a new InfoWindow to display details when clicking on a marker
@@ -35,9 +37,28 @@ function addMarkers(stations) {
         let marker = new google.maps.Marker({
             position: station.position, // Set marker position (latitude & longitude)
             map: map, // Attach marker to the existing map
-            title: station.name // Set the marker title to the station's name
+            title: station.name, // Set the marker title to the station's name
+            icon: {
+                url: "/static/imgs/bike-marker.png", // the path of marer
+                scaledSize: new google.maps.Size(35, 35), 
+                anchor: new google.maps.Point(20, 40) 
+              }
         });
 
+        // Adding hover function and then simply display the current station information
+        marker.addListener("mouseover", () => {
+            const hoverContent = `
+              <div class="custom-info-window">
+                <h6><span class="marker-icon">📍</span>No.${station.number}: ${station.name}
+                </h6>
+                <div class="label">Available Bikes: ${station.available_bikes}</div>
+                <div class="label">Available Stands: ${station.available_bike_stands}</div>
+              </div>
+            `;
+            infoWindow.setContent(hoverContent);
+            infoWindow.open(map, marker);
+          });
+        
         /**
          * Attach an event listener to each marker.
          * When clicked, it fetches weather data for that station and displays its details in an InfoWindow.
@@ -47,6 +68,8 @@ function addMarkers(stations) {
             import("./weather.js").then(module => {
                 module.fetchWeatherData(station);
             });
+
+            showPlotPanel(station);
 
             // Create an HTML content string to display station details inside the InfoWindow
             const contentString = `
@@ -61,9 +84,23 @@ function addMarkers(stations) {
                 </div>
             `;
 
-            // Set the InfoWindow content and open it above the clicked marker
-            infoWindow.setContent(contentString);
-            infoWindow.open(map, marker);
+            // Disolay the station-info-card
+            const stationCard = document.querySelector('.station-info-card');
+            const bikeInfo = document.querySelector('.bike-info');
+
+            // Add the info by api
+            bikeInfo.innerHTML = `
+            <h5 class="card-title">Station No: ${station.number}</h5>
+            <ul>
+                <li><strong>Address:</strong> ${station.address}</li>
+                <li><strong>Total Bikes:</strong> ${station.bike_stands}</li>
+                <li><strong>Available Bikes:</strong> ${station.available_bikes}</li>
+                <li><strong>Available Stands:</strong> ${station.available_bike_stands}</li>
+            </ul>
+            `;
+
+            stationCard.classList.remove('d-none');
+
         });
     });
 }
