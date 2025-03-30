@@ -57,10 +57,10 @@ def dashboard():
     bike_stations = fetch_bike_stations()
     return render_template("index.html", title="Dublin Bikes", stations=bike_stations, google_maps_api_key=GOOGLE_MAPS_API_KEY, first_name=first_name)
 
-# test to draw historical timeseirs data / We can change this function in Sprint 4.
+# test to draw historical timeseries data / We can change this function in Sprint 4.
 # Load history data once at server startup
 # history_station data based on one group of 2023 csc (https://github.com/ZhaoYuxin1211/bikerbyte/tree/main/model)
-HISTORY_DF = pd.read_csv("history_station.csv")
+HISTORY_DF = pd.read_csv(os.path.join(os.path.dirname(__file__), "database", "history_station.csv"))
 
 @app.route("/api/history_data")
 def get_history_data():
