@@ -21,10 +21,3 @@
 
 ### Python Backend
 - `app.py` – added new API route `/api/history_dates`, cleaned up comments
-
----
-
-## 🧹 General Code Cleanup
-- Replaced all Chinese comments with English  
-- Removed development emojis from comments and UI  
-- Improved code formatting and consistency across files  
