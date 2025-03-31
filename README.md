@@ -1,4 +1,4 @@
-# Dublin Bike sharing Website Project - COMP30380 Software Engineering
+# Dublin Bike sharing Website Project - COMP30380 Software Engineering ![image](https://github.com/Justetete/COMP30830-SE-Group11-Dublin-Bike-Sharing-System/blob/main/app/static/imgs/logo2.png)
 
 ## Table of Contents
 - [Project Overview](#project-overview)
