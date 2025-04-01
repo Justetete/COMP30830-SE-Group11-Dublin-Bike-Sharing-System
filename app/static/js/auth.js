@@ -6,11 +6,11 @@ import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPasswo
 
 // Signup Function
 window.signup = async function () {
-  const firstName = document.getElementById("first_name").value;
-  const lastName = document.getElementById("last_name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const errorMessage = document.getElementById("error-message");
+  const firstName = document.getElementById("first-name").value;
+  const lastName = document.getElementById("last-name").value;
+  const email = document.getElementById("signup-email").value;
+  const password = document.getElementById("signup-password").value;
+  const errorMessage = document.getElementById("signup-error-message");
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -77,3 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const signupForm = document.getElementById("signup-form");
+  if (signupForm) {
+    signupForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      signup(); 
+    });
+  }
+});
+
+window.signup = signup;
+
