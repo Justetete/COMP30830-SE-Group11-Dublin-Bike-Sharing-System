@@ -1,5 +1,6 @@
 # 🔧 Dubike Project – Update Log  
-**Date:** March 30, 2025  
+**Date:** March 30, 2025
+**Author:** Xinchi Jian 
 
 ---
 
