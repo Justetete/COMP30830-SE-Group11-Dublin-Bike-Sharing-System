@@ -12,9 +12,10 @@ from firebase_admin import credentials, auth
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Required for session management
 
-# Load API keys from configuration file, 'config.json'
 def load_config():
-    with open("config.json") as config_file:
+    # Load config.json relative to the app.py file itself
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
+    with open(config_path) as config_file:
         return json.load(config_file)
 
 config = load_config()
@@ -29,7 +30,8 @@ BIKE_API_URL = f"https://api.jcdecaux.com/vls/v1/stations?contract={CONTRACT}&ap
 
 # Initialize Firebase Admin SDK
 def initialize_firebase():
-    cred = credentials.Certificate("dublin-bikes-bc821-firebase-adminsdk-fbsvc-6b3b526527.json")
+    cred_path = os.path.join(os.path.dirname(__file__), "dublin-bikes-bc821-firebase-adminsdk-fbsvc-6b3b526527.json")
+    cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)
 
 initialize_firebase()
