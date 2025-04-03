@@ -63,7 +63,7 @@ Informal usability testing was performed with three users who interacted with th
 - Frontend properly reflected backend state (e.g., availability, weather)
 - Minor suggestion to add clearer error messages on login failure
 
-> Based on feedback, visual cues were added after logout, and error messages were improved in Sprint 3.
+> Based on feedback, visual cues were added after logout, and error messages were improved in Sprint 3 (this is why there is a large change to our front end in the commit history!).
 
 ---
 
