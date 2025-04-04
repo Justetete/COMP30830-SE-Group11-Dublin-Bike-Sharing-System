@@ -68,7 +68,7 @@ repo/
 │   ├── config.json             # App configuration
 │   ├── dublin-bikes-bc821-firebase*.json                  # Firebase credentials
 │   ├── templates/              # HTML templates
-│   └── static/              # Frontend - JavaScript (auth, map, weather, etc.) & HTML/CSS
+│   └── static/              # Frontend - JavaScript (auth, map, weather, etc.) & CSS
 ├── tests/
 │   ├── app/                    # Flask app route/API tests
 │   └── database/              # Unit tests for DB ingestion python files
