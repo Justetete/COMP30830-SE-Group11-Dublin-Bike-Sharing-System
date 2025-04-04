@@ -158,7 +158,7 @@ tests\test_suite.py        10      6    40%   17-31, 34-35
 TOTAL                     193     32    83%
 ```
 
-Database-related code is excluded from this run as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS
+Database-related code connected to the RDS is excluded from this run, as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS, however the code still remains in the GitHub repo and works (once you start the AWS RDS). Instead to still provide testing under 'databases' I have included testing for parsing API data correctly and writing the expected contents to local .csv file
 
 ---
 
