@@ -3,17 +3,24 @@
 
 This document details the testing efforts specifically focused on the **database modules** inside the `app/database/` directory of the project.
 
+Due to the suspension of the Amazon RDS instance,
+the project now uses local file outputs to simulate and validate data ingestion logic. However, previous testing and files still remain in this repo and run when the Amazon RDS is turned on (left in repo for clarity and wholeness, only omitted due to cost).
+
 ---
 
 ## Test Types Performed
 
 The following tests were designed to validate the core functionality of the database pipeline for both JCDecaux and OpenWeather integrations:
 
-- **Unit Testing** of database schema creation logic.
-- **Mocking** of SQLAlchemy engine and connections to simulate DB interactions.
-- **Insert Logic Testing** to ensure correct handling of station and weather data.
+- **Mocking**:
+  - `mock_open()` to intercept and verify local file writing
+  - `MagicMock()` to simulate SQL connection calls
+  - `patch()` to fake external API responses and keys
 
-All database tests were implemented using Python’s built-in `unittest` framework and `unittest.mock`, as shown in week 10 lectures.
+- **Assertions**:
+  - `mock_file.assert_called()` ensures write was triggered
+  - `handle.write.call_args_list` allows checking actual content
+  - `mock_conn.execute.call_count` verifies row generation (even without DB)
 
 ---
 
@@ -38,6 +45,8 @@ Test code is located in the `/tests` directory (outside of `app/`). Each test fi
 | `test_openweather_db.py`      | Verifies table creation for weather and forecast tables                  |
 | `test_jcdecauxapi_to_db.py`   | Tests station insertion logic and always-insert availability logic       |
 | `test_openweatherapi_to_db.py`| Tests integration of station and weather data with insert verification   |
+| `test_jcdecauxapi_to_file.py`  | Validates transformation and local writing logic for station data       |
+| `test_openweatherapi_to_file.py` | Verifies weather API response handling and record simulation            |
 
 Each test mocks the SQLAlchemy `engine.connect()` call to prevent any live database interaction.
 
@@ -45,7 +54,7 @@ Each test mocks the SQLAlchemy `engine.connect()` call to prevent any live datab
 
 ## How to Run the Tests
 
-From the project root:
+From the project root, to run Amazon RDS tests:
 
 ```bash
 python3 -m unittest tests/test_jcdecaux_db.py
@@ -54,21 +63,20 @@ python3 -m unittest tests/test_jcdecauxapi_to_db.py
 python3 -m unittest tests/test_openweatherapi_to_db.py
 ```
 
----
+From the project root, to run all tests applicable without RDS (recommended):
 
-## Results Summary
-
-- **All database tests passed**
-- **Repeatable**: Fully mocked and safe to run without a real MySQL server
-- No external dependencies required for running the tests
+```bash
+python3 -m unittest tests/test_jcdecauxapi_to_file.py
+python3 -m unittest tests/test_openweatherapi_to_file.py
+```
 
 ---
 
 ## Conclusion
 
-Testing for the database logic ensures:
-- Tables are created as expected
-- Station and weather records are correctly processed and inserted
-- Mocking provides reliability and speed for validation
+The adapted database testing approach guarantees:
+- The parsing logic is thoroughly validated
+- Integration with local storage works in place of a live DB
+- No loss of test coverage despite cloud service suspension
 
-These tests contribute significantly to the robustness and maintainability of the data ingestion pipeline.
+These tests are lightweight, mock-driven, and ready for continuous integration or future upgrade when the DB is restored.
