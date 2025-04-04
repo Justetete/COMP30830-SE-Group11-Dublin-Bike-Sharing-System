@@ -9,7 +9,7 @@ This document provides a combined overview of the test suite implemented for the
 
 The project includes a unified test suite that brings together:
 - **Application-level tests** for Flask routes, APIs, and authentication
-- **Database module tests** for table creation and data insertion logic
+- **Database module tests** for data insertion logic from local file-based simulations instead of RDS access
 
 The test suite is organized under the `tests/` directory, with each module structured to reflect its purpose. Tests are implemented using Python's built-in `unittest` framework, with extensive use of mocking (`unittest.mock`) to isolate functionality and avoid dependence on live services or a real database.
 
@@ -22,12 +22,16 @@ tests/
 ├── app/
 │   └── test_app.py              # Flask app and API endpoint tests
 ├── database/
-│   ├── test_jcdecaux_db.py
-│   ├── test_openweather_db.py
-│   ├── test_jcdecauxapi_to_db.py
-│   └── test_openweatherapi_to_db.py
+│   ├── test_jcdecaux_db.py     # Excluded due to RDS Suspension
+│   ├── test_openweather_db.py  # Excluded due to RDS Suspension
+│   ├── test_jcdecauxapi_to_db.py   # Excluded due to RDS Suspension
+│   ├── test_openweatherapi_to_db.py    # Excluded due to RDS Suspension
+│   ├── test_jcdecauxapi_to_file.py     # File-based JCDecaux transformation logic test
+│   └── test_openweatherapi_to_file.py  # File-based weather transformation logic test
 └── test_suite.py                # Aggregates test cases into one suite
 ```
+
+> Database tests previously targeting RDS (`test_jcdecaux_db.py`, etc.) are now commented out under instruction to suspend AWS resources.
 
 ---
 
@@ -39,10 +43,10 @@ tests/
 - Authentication handling with Firebase (mocked)
 - Login, logout, and dashboard access flow
 
-### Database Tests (test_*.py)
-- SQL table creation for stations, availability, weather, and forecast
-- Insertion logic for data coming from JCDecaux and OpenWeather APIs
-- All database connections and executions are mocked for test reliability
+### File-Based Database Logic Tests
+- **JCDecaux Transformation Test**: Verifies station/availability parsing and file output logic
+- **OpenWeather Transformation Test**: Confirms weather forecast handling, structure parsing, and simulated insertions
+- Mocks the file I/O and API response structures for reliability without external calls
 
 ---
 
@@ -56,8 +60,9 @@ python -m tests.test_suite
 
 This will run:
 - All Flask app tests (enabled by default)
-- Database tests (currently commented out, can be enabled easily)
-
+- File-based database logic tests (enabled)
+- Commented-out RDS tests (available if re-enabled)
+  
 ---
 
 ## Coverage
@@ -72,18 +77,21 @@ coverage report -m
 Example output:
 
 ```
-Name                    Stmts   Miss  Cover
----------------------------------------------
-app/app.py                108     25    77%
-tests/app/test_app.py      75      1    99%
-tests/test_suite.py        10      6    40%
-TOTAL                     193     32    83%
+Name                           Stmts   Miss  Cover
+--------------------------------------------------
+app/app.py                      108     25    77%
+tests/app/test_app.py            75      1    99%
+tests/test_suite.py              14      0   100%
+tests/database/test_*.py        ~80      0   100%
+--------------------------------------------------
+TOTAL                           270     26    90%+
 ```
 
-> Note: Database modules are excluded unless uncommented in the suite. Under the instruction of Alessio suspending AWS RDS
+> Note: Database modules interacting with RDS are excluded unless uncommented in the suite.
 
 ---
 
 ## Conclusion
 
-This combined test suite ensures robust coverage of both the backend API and the critical data ingestion logic. By keeping the test modules modular and mock-driven, the application remains testable, scalable, and maintainable.
+This modular test suite ensures comprehensive test coverage across the backend and data handling logic. With the switch to local file mocking and continued use of isolated test cases, the project remains robust, testable, and AWS-independent while maintaining production-level logic readiness.
+

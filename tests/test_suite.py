@@ -1,7 +1,8 @@
+
 import unittest
 
 # Import the test case for the Flask app
-from app.test_app import TestFlaskApp
+from tests.app.test_app import TestFlaskApp
 
 ### we are instructed to suspend the RDS due to costs, however from talking to Alessio on discord and the TAs it was clear that we had our RDS running perfectly
 
@@ -9,6 +10,10 @@ from app.test_app import TestFlaskApp
 # from database.test_openweather_db import TestOpenWeatherDB
 # from database.test_jcdecauxapi_to_db import TestJCDecauxAPIToDB
 # from database.test_openweatherapi_to_db import TestOpenWeatherAPIToDB
+
+# File-based mock tests (enabled as alternative)
+from tests.database.test_jcdecauxapi_to_file import TestJCDecauxToFile
+from tests.database.test_openweatherapi_to_file import TestOpenWeatherToFile
 
 def suite():
     """
@@ -19,14 +24,18 @@ def suite():
     # Add Flask app tests
     test_suite.addTest(unittest.makeSuite(TestFlaskApp))
 
-    """ 
+    """
     Here I would include the test cases for the 'database' side of the project, however Prof. Ferrari has instructed that it is 'SUSPENDED' 
-    Since these programs test the RDS database I cannot run them, however as from talking to Alessio on Discord, our RDS was working and all code was too prior to him stopping it
+    Since these programs test the RDS database I cannot run them, however as from talking to Alessio on Discord, our RDS was working and all code was too prior to him stopping it.
     """
     # test_suite.addTest(unittest.makeSuite(TestJCDecauxDB))
     # test_suite.addTest(unittest.makeSuite(TestOpenWeatherDB))
     # test_suite.addTest(unittest.makeSuite(TestJCDecauxAPIToDB))
     # test_suite.addTest(unittest.makeSuite(TestOpenWeatherAPIToDB))
+
+    # File-based database logic testing is included
+    test_suite.addTest(unittest.makeSuite(TestJCDecauxToFile))
+    test_suite.addTest(unittest.makeSuite(TestOpenWeatherToFile))
 
     return test_suite
 
