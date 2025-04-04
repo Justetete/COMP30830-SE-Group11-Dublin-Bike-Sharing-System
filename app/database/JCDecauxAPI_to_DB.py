@@ -7,13 +7,22 @@ import JCD_DB_Info
 import JCD_API_Info
 from datetime import datetime  
 
+
 def stations_to_db(text_data, engine): 
     """Parse, print, and insert station data into the database while avoiding duplicates.
        Also inserts new availability data into the availability table.
+       If no engine is provided, writes the station data to a local JSON file instead.
     """
     try:
         stations = json.loads(text_data)
         print(f"Loaded {len(stations)} stations\n")
+
+        # fallback to file writing if no engine is passed
+        if engine is None:
+            with open("stations_output.json", "w") as f:
+                json.dump(stations, f, indent=2)
+            print("Saved station data to stations_output.json")
+            return
 
         with engine.connect() as conn:
             for station in stations:
@@ -30,7 +39,6 @@ def stations_to_db(text_data, engine):
                 # Check if the station already exists
                 check_query = "SELECT COUNT(*) FROM station WHERE number = :number"
                 query_result = conn.execute(sql_text(check_query), {"number": station.get('number')}).scalar()
-
 
                 if query_result == 0:
                     insert_query = """
@@ -60,6 +68,7 @@ def stations_to_db(text_data, engine):
         print("Error processing data:", e)
         print(traceback.format_exc())
 
+
 def insert_availability(conn, station):
     """Insert availability data into the database, keeping a full history of bike availability."""
     try:
@@ -72,7 +81,7 @@ def insert_availability(conn, station):
         last_update_ts = int(station.get('last_update', 0)) // 1000  # Convert to seconds
         last_update = datetime.utcfromtimestamp(last_update_ts).strftime('%Y-%m-%d %H:%M:%S')
 
-        # **NEW: Always insert a new row, no matter what**
+        # Insert a new availability record
         insert_query = """
             INSERT INTO availability (number, available_bikes, available_bike_stands, last_update, status)
             VALUES (:number, :available_bikes, :available_bike_stands, :last_update, :status)
@@ -89,6 +98,7 @@ def insert_availability(conn, station):
     except Exception as e:
         print(f"Error inserting availability for station {station.get('number')}: {e}")
         print(traceback.format_exc())
+
 
 def main():
     """Fetch JCDecaux station data once and insert into the database."""
@@ -107,6 +117,7 @@ def main():
         stations_to_db(response.text, engine)
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data: {e}")
+
 
 if __name__ == "__main__":
     main()
