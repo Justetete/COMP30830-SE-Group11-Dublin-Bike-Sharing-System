@@ -128,17 +128,37 @@ Access the predictions section to see forecasted station occupancy based on the 
 ### Test Structure
 - `tests/database/`: Unit tests for data ingestion scripts (with SQLAlchemy mocking)
 - `tests/app/`: Flask app route/API tests using `unittest` and `test_client`
+- `tests/test_suite.py`: Central test runner for combining all test cases
 
 ### Run All Tests
 ```bash
-python -m unittest discover -s tests
+python -m tests.test_suite
 ```
 
-### Coverage
-- All routes, APIs, login/logout, and DB functions tested
-- Firebase and API requests mocked for test speed and independence
+---
 
-See `app_testing.md` and `database_testing.md` for full test documentation and outcomes.
+## Code Coverage
+
+To measure test coverage:
+
+```bash
+coverage run -m unittest tests.test_suite
+coverage report -m
+```
+
+### Coverage Report
+
+```
+Name                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------
+app\app.py                108     25    77%   47, 75-95, 103-110, 166-167, 182-183, 190, 194
+tests\app\test_app.py     75      1    99%   106
+tests\test_suite.py        10      6    40%   17-31, 34-35
+-----------------------------------------------------
+TOTAL                     193     32    83%
+```
+
+Database-related code is excluded from this run as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS
 
 ---
 
