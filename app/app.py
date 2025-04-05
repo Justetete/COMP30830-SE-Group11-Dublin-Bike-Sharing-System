@@ -6,7 +6,9 @@ import firebase_admin
 import os
 import pandas as pd
 from datetime import datetime
+import pickle
 from firebase_admin import credentials, auth
+import numpy as np
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -31,6 +33,11 @@ BIKE_API_URL = f"https://api.jcdecaux.com/vls/v1/stations?contract={CONTRACT}&ap
 def initialize_firebase():
     cred = credentials.Certificate("dublin-bikes-bc821-firebase-adminsdk-fbsvc-6b3b526527.json")
     firebase_admin.initialize_app(cred)
+
+## Load the machine learning model
+model_filename = 'bike_availability_model.pkl' # 需要重新修改路径
+with open(model_filename, "rb") as file:
+    model = pickle.load(file)
 
 initialize_firebase()
 
@@ -106,6 +113,47 @@ def get_history_dates():
     # Convert to string list like '2023-04-05'
     result = [date.isoformat() for date in unique_dates]
     return jsonify(result)
+
+## Define a route for predictions ## 
+@app.route("/predict", methods=["GET"])
+def predict():
+    try:
+        # Get date and time from request
+        date = request.args.get("date")
+        time = request.args.get("time")
+        station_id = request.args.get("station_id")  #station_id as an input parameter
+        
+        if not date or not time or not station_id:
+            return jsonify({"error": "Missing date, time, or station_id parameter"}), 400
+
+        # user input date and then openweather api return the JSON file which the model needs
+        openweather_data = fetch_openweather_forecast(date)
+
+        # Combine date and time into a single datetime object
+        dt = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")
+        hour = dt.hour
+        day_of_week = dt.weekday()
+
+        # Combine data into input features
+        input_features = [
+            station_id,
+            openweather_data["temperature"],
+            openweather_data["humidity"],
+            openweather_data["pressure"],
+            hour,
+            day_of_week,
+        ]
+        input_array = np.array(input_features).reshape(1, -1)
+
+        # Make a prediction
+        prediction = model.predict(input_array)
+        
+        return jsonify({"predicted_available_bikes": prediction[0]})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+## Define a route for log in ##
 
 @app.route("/login")
 def login():
@@ -186,6 +234,24 @@ def fetch_bike_stations():
     Fetch bike station data from JCDecaux API.
     """
     return requests.get(BIKE_API_URL).json()
+
+def fetch_openweather_forecast(lat, lon):
+    """
+    Fetch weather data for given latitude and longitude,
+    returning only station_id, temperature, and humidity.
+    这个功能还需要进一步修改，我需要输入的是未来的某一天data，然后根据openaiweather返回一个天气情况，输入给模型，让模型给我传回预测值
+    """
+    weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric"
+    response = requests.get(weather_url).json()
+    
+    # Extract only the required fields
+    result = {
+        "station_id": response.get("id"),  # Station ID
+        "temperature": response.get("main", {}).get("temp"),  # Temperature in Celsius
+        "humidity": response.get("main", {}).get("humidity")  # Humidity percentage
+    }
+    
+    return result
 
 # Run the Flask app
 if __name__ == "__main__":
