@@ -89,17 +89,17 @@ function addMarkers(stations) {
             const bikeInfo = document.querySelector('.bike-info');
 
             // Add the info by api
-            bikeInfo.innerHTML = `
-            <h5 class="card-title">Station No: ${station.number}</h5>
-            <ul>
-                <li><strong>Address:</strong> ${station.address}</li>
-                <li><strong>Total Bikes:</strong> ${station.bike_stands}</li>
-                <li><strong>Available Bikes:</strong> ${station.available_bikes}</li>
-                <li><strong>Available Stands:</strong> ${station.available_bike_stands}</li>
-            </ul>
-            `;
+            // bikeInfo.innerHTML = `
+            // <h5 class="card-title">Station No: ${station.number}</h5>
+            // <ul>
+            //     <li><strong>Address:</strong> ${station.address}</li>
+            //     <li><strong>Total Bikes:</strong> ${station.bike_stands}</li>
+            //     <li><strong>Available Bikes:</strong> ${station.available_bikes}</li>
+            //     <li><strong>Available Stands:</strong> ${station.available_bike_stands}</li>
+            // </ul>
+            // `;
 
-            stationCard.classList.remove('d-none');
+            // stationCard.classList.remove('d-none');
 
         });
     });
