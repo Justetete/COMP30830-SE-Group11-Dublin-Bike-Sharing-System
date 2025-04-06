@@ -9,6 +9,7 @@
 - [Project Structure](#project-structure)
 - [Installation and Setup](#installation-and-setup)
 - [Usage](#usage)
+- [Testing](#testing)
 
 ## Project Overview
 
@@ -54,61 +55,111 @@ This project is designed to provide a dynamic and interactive web application th
 - **Backend:** Python Flask (API)
 - **Database:** MySQL (hosted on Amazon RDS)
 - **Cloud Infrastructure:** AWS (EC2, RDS)
-- **APIs:** JCDecaux API for DublinBikes data, OpenWeather API for weather information
+- **APIs:** JCDecaux API for DublinBikes data, OpenWeather API for weather information, Firebase for Authentification
 - **Mapping:** Google Maps API
 - **Machine Learning:** Python libraries for training and predictions
 
 ## Project Structure
 
-- **frontend/**: Contains HTML, CSS, and JavaScript files for the web interface.
-- **backend/**: Holds the Flask API code, machine learning scripts, and dependencies.
-- **database/**: SQL scripts for setting up the RDS database schema.
-- **docs/**: Additional documentation and design materials.
+```
+repo/
+├── app/
+│   ├── app.py                  # Flask entry point
+│   ├── config.json             # App configuration
+│   ├── dublin-bikes-bc821-firebase*.json                  # Firebase credentials
+│   ├── templates/              # HTML templates
+│   └── static/              # Frontend - JavaScript (auth, map, weather, etc.) & CSS
+├── tests/
+│   ├── app/                    # Flask app route/API tests
+│   └── database/              # Unit tests for DB ingestion python files
+├── docs/                       # Project documentation
+└── README.md
+```
 
 ## Installation and Setup
 
 1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/your-repo/DublinBikeSharing.git
-   cd DublinBikeSharing
-
-2. **Setup Backend**
+  ```bash
+  git clone https://github.com/your-repo/DublinBikeSharing.git
+  cd DublinBikeSharing
+  ```
+    
+2. **Setup Virtual Environment for Python**
 - Navigate to the backend folder
 - Create a virtual environment and install dependencies
 
 ```bash
-# Change to the backend directory
-cd backend
-
-# Create a virtual environment
+cd app
 python -m venv venv
 
-# Activate the virtual environment on Mac
+# Activate the virtual environment
+
+# On Mac/Linux:
 source venv/bin/activate
 
-# If you're on Windows, use this command instead:
-# venv\Scripts\activate
+# On Windows:
+venv\Scripts\activate
 
-# Install the dependencies
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 3. **Running the Application**
-- Start the Flask API
   
 ```python
 # Code to start that Flask App
 python app.py
 ```
 
-- Open 'template/index.html' in your browser to view the interactive map
+- Open `http://127.0.0.1:5000` in your browser.
 
 ## Usage
 - Interactive Map:
-Navigate to the main page to see all Dublin Bike stations displayed on a Google Map. Marker sizes and colors indicate the current bike occupancy and availability.
+Navigate to the main page to see all Dublin Bike stations displayed on a Google Map. Selecting specific markers indicate the current bike occupancy and availability.
 
 - Station Details:
 Click on a station marker to view detailed occupancy data (hourly and daily) and the local weather forecast.
 
 - Predictive Analytics:
 Access the predictions section to see forecasted station occupancy based on the trained machine learning model.
+
+## Testing
+
+### Test Structure
+- `tests/database/`: Unit tests for data ingestion scripts (with SQLAlchemy mocking)
+- `tests/app/`: Flask app route/API tests using `unittest` and `test_client`
+- `tests/test_suite.py`: Central test runner for combining all test cases
+
+### Run All Tests
+```bash
+python -m tests.test_suite
+```
+
+---
+
+## Code Coverage
+
+To measure test coverage:
+
+```bash
+coverage run -m unittest tests.test_suite
+coverage report -m
+```
+
+### Coverage Report
+
+```
+Name                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------
+app\app.py                108     25    77%   47, 75-95, 103-110, 166-167, 182-183, 190, 194
+tests\app\test_app.py     75      1    99%   106
+tests\test_suite.py        10      6    40%   17-31, 34-35
+-----------------------------------------------------
+TOTAL                     193     32    83%
+```
+
+Database-related code connected to the RDS is excluded from this run, as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS, however the code still remains in the GitHub repo and works (once you start the AWS RDS). Instead to still provide testing under 'databases' I have included testing for parsing API data correctly and writing the expected contents to local .csv file
+
+---
+
+This application demonstrates a robust full-stack system integrating live transport data, external weather forecasting, and real-time visual analytics with cloud-based infrastructure.

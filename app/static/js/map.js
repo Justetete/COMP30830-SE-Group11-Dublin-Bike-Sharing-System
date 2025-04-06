@@ -71,35 +71,11 @@ function addMarkers(stations) {
 
             showPlotPanel(station);
 
-            // Create an HTML content string to display station details inside the InfoWindow
-            const contentString = `
-                <div class="info-window-content">
-                    <h2>Station No: ${station.number}</h2>
-                    <ul>
-                        <li><strong>Address:</strong> ${station.address}</li> <!-- Display the station's address -->
-                        <li><strong>Total Bikes:</strong> ${station.bike_stands}</li> <!-- Show total bike stands -->
-                        <li><strong>Available Bikes:</strong> ${station.available_bikes}</li> <!-- Show available bikes -->
-                        <li><strong>Available Stands:</strong> ${station.available_bike_stands}</li> <!-- Show free parking spots -->
-                    </ul>
-                </div>
-            `;
+            //Show the bike prediction card and set the station_id
+            const predictionCard = document.querySelector('#prediction-card');
+            predictionCard.classList.remove('d-none');
+            document.getElementById('station_id').value = station.number;
 
-            // Disolay the station-info-card
-            const stationCard = document.querySelector('.station-info-card');
-            const bikeInfo = document.querySelector('.bike-info');
-
-            // Add the info by api
-            // bikeInfo.innerHTML = `
-            // <h5 class="card-title">Station No: ${station.number}</h5>
-            // <ul>
-            //     <li><strong>Address:</strong> ${station.address}</li>
-            //     <li><strong>Total Bikes:</strong> ${station.bike_stands}</li>
-            //     <li><strong>Available Bikes:</strong> ${station.available_bikes}</li>
-            //     <li><strong>Available Stands:</strong> ${station.available_bike_stands}</li>
-            // </ul>
-            // `;
-
-            // stationCard.classList.remove('d-none');
 
         });
     });

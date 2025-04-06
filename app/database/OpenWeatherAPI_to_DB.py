@@ -4,7 +4,7 @@ import json
 import sqlalchemy  
 from sqlalchemy import create_engine, text as sql_text  
 import JCD_DB_Info  # This remains constant for the openweather and JCDecaux database information (same schema)
-import OpenWeather_API_Info  # OpenWeather API credentials and URL
+from OpenWeather_API_Info import API_KEY # OpenWeather API credentials and URL
 from datetime import datetime  
 
 def stations_to_db(text_data, engine): 
@@ -100,7 +100,7 @@ def fetch_and_insert_weather_data(conn, station):
         station_name = station.get('name', 'Unknown')
         
         # Call OpenWeather API for current weather and forecast
-        weather_url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=hourly,minutely&appid={OpenWeather_API_Info.API_KEY}&units=metric"
+        weather_url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=hourly,minutely&appid={API_KEY}&units=metric"
         weather_response = requests.get(weather_url)
         weather_response.raise_for_status()
         weather_data = weather_response.json()

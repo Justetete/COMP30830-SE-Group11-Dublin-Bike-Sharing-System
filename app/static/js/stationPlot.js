@@ -1,3 +1,48 @@
+function drawWeeklyPredictionChart(stationId) {
+  google.charts.load('current', { packages: ['corechart'] });
+  google.charts.setOnLoadCallback(() => {
+    fetch(`/predict_week?station_id=${stationId}`)
+      .then(response => response.json())
+      .then(data => {
+        const chartData = new google.visualization.DataTable();
+        chartData.addColumn('datetime', 'Time');
+        chartData.addColumn('number', 'Predicted Bikes');
+
+        data.forEach(entry => {
+          chartData.addRow([
+            new Date(entry.time),
+            entry.predicted_bikes
+          ]);
+        });
+
+        const options = {
+          title: 'Predicted Available Bikes (Next 7 Days)',
+          legend: { position: 'bottom' },
+          curveType: 'function',
+          hAxis: {
+            title: 'Date',
+            format: 'MMM/dd',
+            slantedText: true,
+            slantedTextAngle: 20,
+            textStyle: {
+              fontSize: 6
+            },
+            gridlines: {
+              count: 7
+            },
+          },
+          vAxis: { title: 'Available Bikes', minValue: 0 },
+          height: 280
+        };
+
+        const chart = new google.visualization.LineChart(
+          document.getElementById('weeklyChart')
+        );
+        chart.draw(chartData, options);
+      });
+  });
+}
+
 // Display current Station infromation (avaialable bikes and stands)
 function drawStationBarChart(station) {
     const ctx = document.getElementById('stationBarChart').getContext('2d');
@@ -127,6 +172,8 @@ export function showPlotPanel(station) {
 
   drawStationBarChart(station);
   loadAvailableDates(station.number);
+  drawWeeklyPredictionChart(station.number);
+
 }
 
 // Close the panel
