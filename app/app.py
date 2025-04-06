@@ -120,40 +120,104 @@ def get_history_dates():
 @app.route("/predict", methods=["GET"])
 def predict():
     try:
-        # Get date and time from request
         date = request.args.get("date")
         time = request.args.get("time")
-        station_id = request.args.get("station_id")  #station_id as an input parameter
-        
+        station_id = request.args.get("station_id")
+
         if not date or not time or not station_id:
             return jsonify({"error": "Missing date, time, or station_id parameter"}), 400
 
-        # user input date and then openweather api return the JSON file which the model needs
-        openweather_data = fetch_openweather_forecast(date)
+        # get the lat and lng for target station
+        stations = fetch_bike_stations()
+        station = next((s for s in stations if str(s["number"]) == str(station_id)), None)
+        if not station:
+            return jsonify({"error": "Station not found"}), 404
 
-        # Combine date and time into a single datetime object
+        lat = station["position"]["lat"]
+        lon = station["position"]["lng"]
+
+        # call openweather api
+        weather_data = fetch_openweather_forecast(lat, lon, date, time)
+
         dt = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")
         hour = dt.hour
         day_of_week = dt.weekday()
 
-        # Combine data into input features
         input_features = [
-            station_id,
-            openweather_data["temperature"],
-            openweather_data["humidity"],
-            openweather_data["pressure"],
+            int(station_id),
+            weather_data["temperature"],
+            weather_data["humidity"],
+            weather_data["pressure"],
             hour,
             day_of_week,
         ]
-        input_array = np.array(input_features).reshape(1, -1)
 
-        # Make a prediction
+        input_array = np.array(input_features).reshape(1, -1)
         prediction = model.predict(input_array)
-        
-        return jsonify({"predicted_available_bikes": prediction[0]})
+
+        return jsonify({"predicted_available_bikes": round(float(prediction[0]))})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/predict_week", methods=["GET"])
+def predict_week():
+    try:
+        station_id = request.args.get("station_id")
+        if not station_id:
+            return jsonify({"error": "Missing station_id"}), 400
+
+        # get the lat and lng for target station
+        stations = fetch_bike_stations()
+        station = next((s for s in stations if str(s["number"]) == str(station_id)), None)
+        if not station:
+            return jsonify({"error": "Station not found"}), 404
+
+        lat = station["position"]["lat"]
+        lon = station["position"]["lng"]
+
+        # 请求 OpenWeather One Call 3.0 API 获取未来 7 天每小时数据
+        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,alerts&appid={OPENWEATHER_API_KEY}&units=metric"
+        response = requests.get(url)
+        if response.status_code != 200:
+            return jsonify({"error": "Failed to fetch weather forecast"}), 500
+
+        data = response.json()
+        hourly_data = data.get("hourly", [])
+
+        results = []
+        for entry in hourly_data:
+            timestamp = datetime.utcfromtimestamp(entry["dt"])
+            hour = timestamp.hour
+            day_of_week = timestamp.weekday()
+
+            temperature = entry.get("temp")
+            humidity = entry.get("humidity")
+            pressure = entry.get("pressure")
+
+            # 构造特征向量
+            input_features = [
+                int(station_id),
+                temperature,
+                humidity,
+                pressure,
+                hour,
+                day_of_week
+            ]
+            input_array = np.array(input_features).reshape(1, -1)
+            predicted_bikes = model.predict(input_array)[0]
+
+            results.append({
+                "time": timestamp.strftime("%Y-%m-%dT%H:%M:%S"),
+                "predicted_bikes": predicted_bikes
+            })
+
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 ## Define a route for log in ##
 
@@ -237,23 +301,39 @@ def fetch_bike_stations():
     """
     return requests.get(BIKE_API_URL).json()
 
-def fetch_openweather_forecast(lat, lon):
+def fetch_openweather_forecast(lat, lon, target_date_str, target_time_str):
     """
-    Fetch weather data for given latitude and longitude,
-    returning only station_id, temperature, and humidity.
-    这个功能还需要进一步修改，我需要输入的是未来的某一天data，然后根据openaiweather返回一个天气情况，输入给模型，让模型给我传回预测值
+    Fetch hourly forecast from OpenWeather 3.0 API and find the record
+    closest to the requested datetime.
     """
-    weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OPENWEATHER_API_KEY}&units=metric"
-    response = requests.get(weather_url).json()
-    
-    # Extract only the required fields
-    result = {
-        "station_id": response.get("id"),  # Station ID
-        "temperature": response.get("main", {}).get("temp"),  # Temperature in Celsius
-        "humidity": response.get("main", {}).get("humidity")  # Humidity percentage
+    from datetime import datetime
+    target_dt = datetime.strptime(f"{target_date_str} {target_time_str}", "%Y-%m-%d %H:%M:%S")
+
+    url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,daily,alerts&units=metric&appid={OPENWEATHER_API_KEY}"
+    response = requests.get(url).json()
+
+    if "hourly" not in response:
+        raise Exception("No hourly forecast data found")
+
+    closest_forecast = None
+    min_diff = float("inf")
+
+    for forecast in response["hourly"]:
+        forecast_time = datetime.fromtimestamp(forecast["dt"])
+        diff = abs((forecast_time - target_dt).total_seconds())
+        if diff < min_diff:
+            min_diff = diff
+            closest_forecast = forecast
+
+    if closest_forecast is None:
+        raise Exception("No matching forecast found")
+
+    return {
+        "temperature": closest_forecast["temp"],
+        "humidity": closest_forecast["humidity"],
+        "pressure": closest_forecast["pressure"]
     }
-    
-    return result
+
 
 # Run the Flask app
 if __name__ == "__main__":
