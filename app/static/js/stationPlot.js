@@ -1,3 +1,6 @@
+// ===============================
+// Draw Weekly Prediction Chart (Google Charts)
+// ===============================
 function drawWeeklyPredictionChart(stationId) {
   google.charts.load('current', { packages: ['corechart'] });
   google.charts.setOnLoadCallback(() => {
@@ -43,80 +46,93 @@ function drawWeeklyPredictionChart(stationId) {
   });
 }
 
-// Display current Station infromation (avaialable bikes and stands)
+// ===============================
+// Draw Station Bar Chart (Available Bikes & Stands)
+// ===============================
 function drawStationBarChart(station) {
-    const ctx = document.getElementById('stationBarChart').getContext('2d');
-  
-    if (window.stationChart) {
-      window.stationChart.destroy();
-    }
-  
-    window.stationChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Available Bikes', 'Free Stands'],
-        datasets: [{
-          label: 'Count',
-          data: [station.available_bikes, station.available_bike_stands],
-          backgroundColor: ['#187a3c', '#a8d5ba']
-        }]
-      },
-      options: {
-        layout: { padding: { top: 20 } },
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          title: { display: false },
-          datalabels: {
-            color: '#333',
-            anchor: 'end',
-            align: 'top',
-            font: {
-              weight: 'bold',
-              size: 12
-            },
-            formatter: value => value
-          }
-        },
-        scales: {
-          x: { grid: { display: false } },
-          y: { beginAtZero: true }
-        }
-      },
-      plugins: [ChartDataLabels]
-    });
+  const ctx = document.getElementById('stationBarChart').getContext('2d');
+
+  // Destroy existing chart if present
+  if (window.stationChart) {
+    window.stationChart.destroy();
   }
 
-function loadAvailableDates(stationId) {
-  fetch(`/api/history_dates?station_id=${stationId}`)
-  .then(res => res.json())
-  .then(dates => {
-      if (!dates || dates.length === 0) {
-      document.getElementById('dateSelector').innerHTML = `<option disabled>No data</option>`;
-      return;
+  // Create new bar chart
+  window.stationChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Available Bikes', 'Free Stands'],
+      datasets: [{
+        label: 'Count',
+        data: [station.available_bikes, station.available_bike_stands],
+        backgroundColor: ['#187a3c', '#a8d5ba']
+      }]
+    },
+    options: {
+      layout: { padding: { top: 20 } },
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: false },
+        datalabels: {
+          color: '#333',
+          anchor: 'end',
+          align: 'top',
+          font: {
+            weight: 'bold',
+            size: 12
+          },
+          formatter: value => value
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true }
       }
-
-      const select = document.getElementById('dateSelector');
-      select.innerHTML = '';
-
-      dates.forEach(dateStr => {
-      const option = document.createElement('option');
-      option.value = dateStr;
-      option.textContent = dateStr;
-      select.appendChild(option);
-      });
-
-      drawTimeSeriesChart(stationId, dates[0]);
-
-      select.onchange = () => {
-      drawTimeSeriesChart(stationId, select.value);
-      };
+    },
+    plugins: [ChartDataLabels]
   });
 }
 
+// ===============================
+// Load Available Dates for Historical Data Dropdown
+// ===============================
+function loadAvailableDates(stationId) {
+  fetch(`/api/history_dates?station_id=${stationId}`)
+    .then(res => res.json())
+    .then(dates => {
+      const select = document.getElementById('dateSelector');
+
+      // If no dates found
+      if (!dates || dates.length === 0) {
+        select.innerHTML = `<option disabled>No data</option>`;
+        return;
+      }
+
+      // Populate dropdown with dates
+      select.innerHTML = '';
+      dates.forEach(dateStr => {
+        const option = document.createElement('option');
+        option.value = dateStr;
+        option.textContent = dateStr;
+        select.appendChild(option);
+      });
+
+      // Load time series chart for first date by default
+      drawTimeSeriesChart(stationId, dates[0]);
+
+      // Update chart on date selection change
+      select.onchange = () => {
+        drawTimeSeriesChart(stationId, select.value);
+      };
+    });
+}
+
+// ===============================
+// Draw Time Series Chart for Selected Day
+// ===============================
 function drawTimeSeriesChart(stationId, date) {
   google.charts.load('current', { packages: ['corechart'] });
-
   google.charts.setOnLoadCallback(() => {
     const data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
@@ -161,10 +177,11 @@ function drawTimeSeriesChart(stationId, date) {
         console.error("Failed to draw time series chart:", err);
       });
   });
-}  
-  
-  
-// Open the right side panel
+}
+
+// ===============================
+// Show Plot Panel (Right Sidebar)
+// ===============================
 export function showPlotPanel(station) {
   document.getElementById('plot-title').textContent = station.name;
   document.getElementById('plot-number').textContent = `Station No: ${station.number}`;
@@ -173,12 +190,14 @@ export function showPlotPanel(station) {
   drawStationBarChart(station);
   loadAvailableDates(station.number);
   drawWeeklyPredictionChart(station.number);
-
 }
 
-// Close the panel
+// ===============================
+// Close Plot Panel
+// ===============================
 export function closePlotPanel() {
   document.getElementById('stationPlotPanel').classList.remove('active');
 }
 
+// Make closePlotPanel accessible from global scope
 window.closePlotPanel = closePlotPanel;
