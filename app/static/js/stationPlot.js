@@ -95,7 +95,6 @@ function drawDailyTrendChart(stationId, date) {
       
 
         const options = {
-          title: 'Daily Trend',
           legend: { 
             position: 'bottom',
             alignment: 'center',
