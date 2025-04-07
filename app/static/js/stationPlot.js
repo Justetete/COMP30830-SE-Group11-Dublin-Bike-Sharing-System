@@ -47,6 +47,93 @@ function drawWeeklyPredictionChart(stationId) {
 }
 
 // ===============================
+// Draw Daily Station Trend Chart (Available Bikes & Stands)
+// ===============================
+function smoothData(rawData, windowSize = 5) {
+  const result = [];
+  for (let i = 0; i < rawData.length; i++) {
+    let totalBikes = 0, totalStands = 0, count = 0;
+    for (let j = -Math.floor(windowSize / 2); j <= Math.floor(windowSize / 2); j++) {
+      const idx = i + j;
+      if (idx >= 0 && idx < rawData.length) {
+        totalBikes += rawData[idx].bikes;
+        totalStands += rawData[idx].stands;
+        count++;
+      }
+    }
+    result.push({
+      time: rawData[i].time,
+      bikes: totalBikes / count,
+      stands: totalStands / count
+    });
+  }
+  return result;
+}
+
+function drawDailyTrendChart(stationId, date) {
+  google.charts.load('current', { packages: ['corechart'] });
+
+  google.charts.setOnLoadCallback(() => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('datetime', 'Time');
+    data.addColumn('number', 'Available Bikes');
+    data.addColumn('number', 'Free Stands');
+
+    const url = `/api/history_data?station_id=${stationId}&date=${date}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(rawData => {
+        const smooth = smoothData(rawData, 5);
+        smooth.forEach(entry => {
+          data.addRow([
+            new Date(entry.time),
+            entry.bikes,
+            entry.stands
+          ]);
+        });
+      
+
+        const options = {
+          title: 'Daily Trend',
+          legend: { 
+            position: 'bottom',
+            alignment: 'center',
+            textStyle: {fontSize: 10},
+          },
+          curveType: 'function',
+          hAxis: {
+            title: 'Time',
+            format: 'HH:mm',
+            slantedText: true,
+            slantedTextAngle: 20,
+          },
+          vAxis: {
+            viewWindow: {
+              min: 0,
+              max: 45
+            },
+            maxValue: 45,
+            title: 'Count',
+            minValue: 0
+          },
+          colors: ['#e74c3c', '#2980b9'],
+          height: 280
+        };
+
+        const chart = new google.visualization.LineChart(
+          document.getElementById('dailyTrendChart')
+        );
+        chart.draw(data, options);
+      })
+      .catch(err => {
+        console.error("Error drawing daily trend chart:", err);
+      });
+  });
+}
+
+
+// ===============================
 // Draw Station Bar Chart (Available Bikes & Stands)
 // ===============================
 function drawStationBarChart(station) {
@@ -131,53 +218,53 @@ function loadAvailableDates(stationId) {
 // ===============================
 // Draw Time Series Chart for Selected Day
 // ===============================
-function drawTimeSeriesChart(stationId, date) {
-  google.charts.load('current', { packages: ['corechart'] });
-  google.charts.setOnLoadCallback(() => {
-    const data = new google.visualization.DataTable();
-    data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Available Bikes');
-    data.addColumn('number', 'Free Stands');
+// function drawTimeSeriesChart(stationId, date) {
+//   google.charts.load('current', { packages: ['corechart'] });
+//   google.charts.setOnLoadCallback(() => {
+//     const data = new google.visualization.DataTable();
+//     data.addColumn('datetime', 'Time');
+//     data.addColumn('number', 'Available Bikes');
+//     data.addColumn('number', 'Free Stands');
 
-    const url = `/api/history_data?station_id=${stationId}&date=${date}`;
+//     const url = `/api/history_data?station_id=${stationId}&date=${date}`;
 
-    fetch(url)
-      .then(res => res.json())
-      .then(rawData => {
-        rawData.forEach(entry => {
-          data.addRow([
-            new Date(entry.time),
-            entry.bikes,
-            entry.stands
-          ]);
-        });
+//     fetch(url)
+//       .then(res => res.json())
+//       .then(rawData => {
+//         rawData.forEach(entry => {
+//           data.addRow([
+//             new Date(entry.time),
+//             entry.bikes,
+//             entry.stands
+//           ]);
+//         });
 
-        const options = {
-          title: '',
-          legend: { position: 'bottom' },
-          curveType: 'function',
-          hAxis: {
-            title: 'Time',
-            format: 'H:mm'
-          },
-          vAxis: {
-            title: 'Count',
-            minValue: 0
-          },
-          colors: ['#e67e22', '#3498db'],
-          height: 280
-        };
+//         const options = {
+//           title: '',
+//           legend: { position: 'bottom' },
+//           curveType: 'function',
+//           hAxis: {
+//             title: 'Time',
+//             format: 'H:mm'
+//           },
+//           vAxis: {
+//             title: 'Count',
+//             minValue: 0
+//           },
+//           colors: ['#e67e22', '#3498db'],
+//           height: 280
+//         };
 
-        const chart = new google.visualization.LineChart(
-          document.getElementById('timeSeriesChart')
-        );
-        chart.draw(data, options);
-      })
-      .catch(err => {
-        console.error("Failed to draw time series chart:", err);
-      });
-  });
-}
+//         const chart = new google.visualization.LineChart(
+//           document.getElementById('timeSeriesChart')
+//         );
+//         chart.draw(data, options);
+//       })
+//       .catch(err => {
+//         console.error("Failed to draw time series chart:", err);
+//       });
+//   });
+// }
 
 // ===============================
 // Show Plot Panel (Right Sidebar)
@@ -190,6 +277,14 @@ export function showPlotPanel(station) {
   drawStationBarChart(station);
   loadAvailableDates(station.number);
   drawWeeklyPredictionChart(station.number);
+
+  fetch(`/api/history_dates?station_id=${station.number}`)
+    .then(res => res.json())
+    .then(dates => {
+      if (dates.length > 0) {
+        drawDailyTrendChart(station.number, dates[0]);
+      }
+    });
 }
 
 // ===============================
