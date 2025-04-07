@@ -62,7 +62,7 @@ function smoothData(rawData, windowSize = 5) {
       }
     }
     result.push({
-      time: rawData[i].time,
+      time: new Date(data[i].last_update),
       bikes: totalBikes / count,
       stands: totalStands / count
     });
@@ -79,15 +79,16 @@ function drawDailyTrendChart(stationId, date) {
     data.addColumn('number', 'Available Bikes');
     data.addColumn('number', 'Free Stands');
 
-    const url = `/api/history_data?station_id=${stationId}&date=${date}`;
+    const url = `/api/station_history?station_id=${stationId}`;
 
     fetch(url)
       .then(res => res.json())
       .then(rawData => {
+        console.log("Raw data received:", rawData);
         const smooth = smoothData(rawData, 5);
         smooth.forEach(entry => {
           data.addRow([
-            new Date(entry.time),
+            entry.time,
             entry.bikes,
             entry.stands
           ]);
@@ -180,90 +181,6 @@ function drawStationBarChart(station) {
   });
 }
 
-// ===============================
-// Load Available Dates for Historical Data Dropdown
-// ===============================
-function loadAvailableDates(stationId) {
-  fetch(`/api/history_dates?station_id=${stationId}`)
-    .then(res => res.json())
-    .then(dates => {
-      const select = document.getElementById('dateSelector');
-
-      // If no dates found
-      if (!dates || dates.length === 0) {
-        select.innerHTML = `<option disabled>No data</option>`;
-        return;
-      }
-
-      // Populate dropdown with dates
-      select.innerHTML = '';
-      dates.forEach(dateStr => {
-        const option = document.createElement('option');
-        option.value = dateStr;
-        option.textContent = dateStr;
-        select.appendChild(option);
-      });
-
-      // Load time series chart for first date by default
-      drawTimeSeriesChart(stationId, dates[0]);
-
-      // Update chart on date selection change
-      select.onchange = () => {
-        drawTimeSeriesChart(stationId, select.value);
-      };
-    });
-}
-
-// ===============================
-// Draw Time Series Chart for Selected Day
-// ===============================
-// function drawTimeSeriesChart(stationId, date) {
-//   google.charts.load('current', { packages: ['corechart'] });
-//   google.charts.setOnLoadCallback(() => {
-//     const data = new google.visualization.DataTable();
-//     data.addColumn('datetime', 'Time');
-//     data.addColumn('number', 'Available Bikes');
-//     data.addColumn('number', 'Free Stands');
-
-//     const url = `/api/history_data?station_id=${stationId}&date=${date}`;
-
-//     fetch(url)
-//       .then(res => res.json())
-//       .then(rawData => {
-//         rawData.forEach(entry => {
-//           data.addRow([
-//             new Date(entry.time),
-//             entry.bikes,
-//             entry.stands
-//           ]);
-//         });
-
-//         const options = {
-//           title: '',
-//           legend: { position: 'bottom' },
-//           curveType: 'function',
-//           hAxis: {
-//             title: 'Time',
-//             format: 'H:mm'
-//           },
-//           vAxis: {
-//             title: 'Count',
-//             minValue: 0
-//           },
-//           colors: ['#e67e22', '#3498db'],
-//           height: 280
-//         };
-
-//         const chart = new google.visualization.LineChart(
-//           document.getElementById('timeSeriesChart')
-//         );
-//         chart.draw(data, options);
-//       })
-//       .catch(err => {
-//         console.error("Failed to draw time series chart:", err);
-//       });
-//   });
-// }
 
 // ===============================
 // Show Plot Panel (Right Sidebar)
@@ -274,16 +191,9 @@ export function showPlotPanel(station) {
   document.getElementById('stationPlotPanel').classList.add('active');
 
   drawStationBarChart(station);
-  loadAvailableDates(station.number);
   drawWeeklyPredictionChart(station.number);
+  drawDailyTrendChart(station.number)
 
-  fetch(`/api/history_dates?station_id=${station.number}`)
-    .then(res => res.json())
-    .then(dates => {
-      if (dates.length > 0) {
-        drawDailyTrendChart(station.number, dates[0]);
-      }
-    });
 }
 
 // ===============================
