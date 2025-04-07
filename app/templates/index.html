@@ -41,22 +41,37 @@
                             </div>
                         </div>
                     <!-- Station Info Below Weather -->
-                    <div class="card mt-3 d-none" id="prediction-card">
+                    <div class="card mt-3" id="prediction-card">
                         <div class="card-body">
                             <h5 class="mb-3 text-success fw-semibold">Bike Availability Prediction</h5>
+
+                            <!-- Buttons to toggle sections -->
+                            <div class="d-flex justify-content-around mb-3">
+                                <button class="btn btn-outline-success btn-sm" onclick="toggleSection('single-day')">Predict One Day</button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="toggleSection('weekly')">7-Day Forecast</button>
+                            </div>
                         
-                            <label for="date">Select Date:</label>
-                            <input type="date" class="form-control mb-2" id="date" required>
+                            <!-- Single-day prediction section -->
+                            <div id="single-day-section" class="d-none">
+                                <label for="date">Select Date:</label>
+                                <input type="date" class="form-control mb-2" id="date" required>
                         
-                            <label for="time">Select Time:</label>
-                            <input type="time" class="form-control mb-2" id="time" required>
+                                <label for="time">Select Time:</label>
+                                <input type="time" class="form-control mb-2" id="time" required>
                         
-                            <label for="station_id">Select Station:</label>
-                            <input type="number" class="form-control mb-2" id="station_id" required>
+                                <label for="station_id">Select Station:</label>
+                                <input type="number" class="form-control mb-2" id="station_id" required>
                         
-                            <button id="predict-btn" class="btn btn-success btn-sm mt-2" onclick="predict()">Predict</button>
+                                <button id="predict-btn" class="btn btn-success btn-sm mt-2" onclick="predict()">Predict</button>
                         
-                            <div id="result" class="mt-2 text-primary"></div>
+                                <div id="result" class="mt-2 text-primary"></div>
+                            </div>
+                        
+                            <!-- Weekly forecast section -->
+                            <div id="weekly-section" class="d-none">
+                                <h6 id="predict-data" class="fw-semibold mt-2">7-Day Forecast</h6>
+                                <div id="weeklyChart"></div>
+                            </div>
                         </div>
                       </div>                      
                 </div>
@@ -78,9 +93,6 @@
                         <h5 class="fw-semibold">Daily Station Trend</h5>
                         <div id="dailyTrendChart"></div>
                     </div>
-                    <!-- <hr>
-                    <h5 id="predict-data" class="mt-3">7-Day Forecast</h5>
-                    <div id="weeklyChart"></div> -->
                 </div>
             </div>
 
@@ -101,7 +113,8 @@
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
         <!-- Add this to index.html -->
-        <script src="{{ url_for('static', filename='js/fetching_results.js') }}"></script>
+        <script type="module" src="{{ url_for('static', filename='js/fetching_results.js') }}"></script>
+
 
     </body>
 </html>

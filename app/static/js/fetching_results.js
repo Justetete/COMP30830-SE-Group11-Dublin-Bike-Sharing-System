@@ -86,3 +86,29 @@ function drawWeeklyPredictionChart(stationId) {
         });
     });
 }
+
+// ===============================
+// Function: toggleSection(section)
+// Description: In prediction card, We allow user to select which way to predict the number of available bikes in the future.
+// ===============================
+export function toggleSection(section) {
+    const single = document.getElementById('single-day-section');
+    const weekly = document.getElementById('weekly-section');
+  
+    if (section === 'single-day') {
+      single.classList.remove('d-none');
+      weekly.classList.add('d-none');
+    } else {
+      single.classList.add('d-none');
+      weekly.classList.remove('d-none');
+  
+      const stationId = document.getElementById("station_id").value;
+      if (stationId) {
+        drawWeeklyPredictionChart(stationId);
+      } else {
+        document.getElementById("weeklyChart").innerHTML = "<small class='text-muted'>Please enter a Station ID above.</small>";
+      }
+    }
+  }
+  
+window.toggleSection = toggleSection;
