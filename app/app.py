@@ -37,7 +37,7 @@ def initialize_firebase():
     firebase_admin.initialize_app(cred)
 
 ## Load the machine learning model
-model_filename = 'bike_availability_model.pkl'
+model_filename = 'Dubike_random_forest_model.joblib'
 with open(model_filename, "rb") as file:
     model = pickle.load(file)
 
@@ -145,7 +145,8 @@ def predict():
 
         input_features = [
             int(station_id),
-            weather_data["temperature"],
+            weather_data["max_temperature"],
+            weather_data["min_temperature"],
             weather_data["humidity"],
             weather_data["pressure"],
             hour,
