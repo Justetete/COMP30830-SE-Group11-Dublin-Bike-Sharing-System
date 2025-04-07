@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, text as sql_text
 import JCD_DB_Info
 import JCD_API_Info
 from datetime import datetime  
+import time
 
 
 def stations_to_db(text_data, engine): 
@@ -120,4 +121,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        print("Fetching and writing data...")
+        main()
+        print("Sleeping for 5 minutes...\n")
+        time.sleep(300)  
