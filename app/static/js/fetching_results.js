@@ -112,3 +112,4 @@ export function toggleSection(section) {
   }
   
 window.toggleSection = toggleSection;
+window.predict = predict;

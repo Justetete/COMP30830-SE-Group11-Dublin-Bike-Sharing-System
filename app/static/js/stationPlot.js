@@ -62,7 +62,7 @@ function smoothData(rawData, windowSize = 5) {
       }
     }
     result.push({
-      time: new Date(data[i].last_update),
+      time: new Date(rawData[i].last_update),
       bikes: totalBikes / count,
       stands: totalStands / count
     });
@@ -70,7 +70,7 @@ function smoothData(rawData, windowSize = 5) {
   return result;
 }
 
-function drawDailyTrendChart(stationId, date) {
+function drawDailyTrendChart(stationId) {
   google.charts.load('current', { packages: ['corechart'] });
 
   google.charts.setOnLoadCallback(() => {
@@ -79,20 +79,21 @@ function drawDailyTrendChart(stationId, date) {
     data.addColumn('number', 'Available Bikes');
     data.addColumn('number', 'Free Stands');
 
-    const url = `/api/station_history?station_id=${stationId}`;
+    //now the historical date has problem, we need to scrap the station data again
+    const url = `/api/station_history?station_id=1`;
 
     fetch(url)
       .then(res => res.json())
       .then(rawData => {
-        console.log("Raw data received:", rawData);
-        const smooth = smoothData(rawData, 5);
-        smooth.forEach(entry => {
+        // console.log("Raw data received:", rawData);
+        rawData.forEach(entry => {
           data.addRow([
-            entry.time,
+            new Date(entry.time),
             entry.bikes,
             entry.stands
           ]);
         });
+        
       
 
         const options = {

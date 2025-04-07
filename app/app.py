@@ -88,8 +88,18 @@ def get_station_history():
     else:
         target_date = HISTORY_DF['last_update'].dt.date.max()
 
-    filtered_data = HISTORY_DF[(HISTORY_DF['number'] == station_id) & (HISTORY_DF['last_update'].dt.date == target_date)]
-    result = filtered_data.to_dict(orient='records')
+    filtered_data = HISTORY_DF[
+    (HISTORY_DF['number'] == station_id) &
+    (HISTORY_DF['last_update'].dt.normalize() == pd.to_datetime(target_date))
+]
+
+    result = []
+    for _, row in filtered_data.iterrows():
+        result.append({
+            "time": row["last_update"].strftime("%Y-%m-%dT%H:%M:%S"),
+            "bikes": row["available_bikes"],
+            "stands": row["available_bike_stands"]
+        })
 
     return jsonify(result)
 
@@ -119,7 +129,7 @@ def predict():
 
         dt = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")
         hour = dt.hour
-        day_of_week = dt.weekday()
+        day = dt.weekday()
 
         input_features = [
             int(station_id),
@@ -128,11 +138,12 @@ def predict():
             weather_data["humidity"],
             weather_data["pressure"],
             hour,
-            day_of_week,
+            day,
         ]
 
-        input_array = np.array(input_features).reshape(1, -1)
-        prediction = model.predict(input_array)
+        columns = ["station_id", "max_temperature", "min_temperature", "humidity", "pressure", "hour", "day"]
+        input_df = pd.DataFrame([input_features], columns=columns)
+        prediction = model.predict(input_df)
 
         return jsonify({"predicted_available_bikes": round(float(prediction[0]))})
 
@@ -146,7 +157,6 @@ def predict_week():
         if not station_id:
             return jsonify({"error": "Missing station_id"}), 400
 
-        # get the lat and lng for target station
         stations = fetch_bike_stations()
         station = next((s for s in stations if str(s["number"]) == str(station_id)), None)
         if not station:
@@ -165,24 +175,27 @@ def predict_week():
 
         results = []
         for entry in hourly_data:
-            timestamp = datetime.utcfromtimestamp(entry["dt"])
+            from datetime import timezone
+            timestamp = datetime.fromtimestamp(entry["dt"], tz=timezone.utc)
             hour = timestamp.hour
             day_of_week = timestamp.weekday()
 
-            temperature = entry.get("temp")
+            temp = entry.get("temp")
             humidity = entry.get("humidity")
             pressure = entry.get("pressure")
 
             input_features = [
                 int(station_id),
-                temperature,
+                temp, temp,  # max_temperature, min_temperature
                 humidity,
                 pressure,
                 hour,
                 day_of_week
             ]
-            input_array = np.array(input_features).reshape(1, -1)
-            predicted_bikes = model.predict(input_array)[0]
+
+            columns = ["station_id", "max_temperature", "min_temperature", "humidity", "pressure", "hour", "day"]
+            input_df = pd.DataFrame([input_features], columns=columns)
+            predicted_bikes = float(model.predict(input_df)[0])
 
             results.append({
                 "time": timestamp.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -192,7 +205,9 @@ def predict_week():
         return jsonify(results)
 
     except Exception as e:
+        print("Prediction error:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 ## Define a route for log in ##
 
@@ -304,7 +319,8 @@ def fetch_openweather_forecast(lat, lon, target_date_str, target_time_str):
         raise Exception("No matching forecast found")
 
     return {
-        "temperature": closest_forecast["temp"],
+        "max_temperature": closest_forecast["temp"],
+        "min_temperature": closest_forecast["temp"],
         "humidity": closest_forecast["humidity"],
         "pressure": closest_forecast["pressure"]
     }
