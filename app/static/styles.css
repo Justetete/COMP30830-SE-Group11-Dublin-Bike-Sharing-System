@@ -181,6 +181,15 @@ right: 0;
     padding-top: 8px
   }
   
+#dailyTrendChart {
+  width: 300px;
+  height: 400px;
+  margin: auto;
+}
+
+#weeklyChart {
+  margin:0;
+}
 
 
 /* default: hide the close-button in google map when mouse hover on a station */

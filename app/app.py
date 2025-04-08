@@ -150,6 +150,64 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+# @app.route("/predict_week", methods=["GET"])
+# def predict_week():
+#     try:
+#         station_id = request.args.get("station_id")
+#         if not station_id:
+#             return jsonify({"error": "Missing station_id"}), 400
+
+#         stations = fetch_bike_stations()
+#         station = next((s for s in stations if str(s["number"]) == str(station_id)), None)
+#         if not station:
+#             return jsonify({"error": "Station not found"}), 404
+
+#         lat = station["position"]["lat"]
+#         lon = station["position"]["lng"]
+
+#         url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,alerts&appid={OPENWEATHER_API_KEY}&units=metric"
+#         response = requests.get(url)
+#         if response.status_code != 200:
+#             return jsonify({"error": "Failed to fetch weather forecast"}), 500
+
+#         data = response.json()
+#         hourly_data = data.get("hourly", [])
+
+#         results = []
+#         for entry in hourly_data:
+#             from datetime import timezone
+#             timestamp = datetime.fromtimestamp(entry["dt"], tz=timezone.utc)
+#             hour = timestamp.hour
+#             day_of_week = timestamp.weekday()
+
+#             temp = entry.get("temp")
+#             humidity = entry.get("humidity")
+#             pressure = entry.get("pressure")
+
+#             input_features = [
+#                 int(station_id),
+#                 temp, temp,  # max_temperature, min_temperature
+#                 humidity,
+#                 pressure,
+#                 hour,
+#                 day_of_week
+#             ]
+
+#             columns = ["station_id", "max_temperature", "min_temperature", "humidity", "pressure", "hour", "day"]
+#             input_df = pd.DataFrame([input_features], columns=columns)
+#             predicted_bikes = float(model.predict(input_df)[0])
+
+#             results.append({
+#                 "time": timestamp.strftime("%Y-%m-%dT%H:%M:%S"),
+#                 "predicted_bikes": predicted_bikes
+#             })
+
+#         return jsonify(results)
+
+#     except Exception as e:
+#         print("Prediction error:", str(e))
+#         return jsonify({"error": str(e)}), 500
+    
 @app.route("/predict_week", methods=["GET"])
 def predict_week():
     try:
@@ -165,32 +223,33 @@ def predict_week():
         lat = station["position"]["lat"]
         lon = station["position"]["lng"]
 
-        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,alerts&appid={OPENWEATHER_API_KEY}&units=metric"
+        url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,hourly,alerts&appid={OPENWEATHER_API_KEY}&units=metric"
         response = requests.get(url)
         if response.status_code != 200:
             return jsonify({"error": "Failed to fetch weather forecast"}), 500
 
         data = response.json()
-        hourly_data = data.get("hourly", [])
-
+        daily_data = data.get("daily", [])
         results = []
-        for entry in hourly_data:
+        for forecast in daily_data:
             from datetime import timezone
-            timestamp = datetime.fromtimestamp(entry["dt"], tz=timezone.utc)
-            hour = timestamp.hour
+            timestamp = datetime.fromtimestamp(forecast["dt"], tz=timezone.utc)
             day_of_week = timestamp.weekday()
+            hour = 12
 
-            temp = entry.get("temp")
-            humidity = entry.get("humidity")
-            pressure = entry.get("pressure")
+            max_temp = forecast["temp"]["max"]
+            min_temp = forecast["temp"]["min"]
+            humidity = forecast.get("humidity", 0)
+            pressure = forecast.get("pressure", 0)
 
             input_features = [
                 int(station_id),
-                temp, temp,  # max_temperature, min_temperature
+                max_temp,
+                min_temp,
                 humidity,
                 pressure,
                 hour,
-                day_of_week
+                day_of_week,
             ]
 
             columns = ["station_id", "max_temperature", "min_temperature", "humidity", "pressure", "hour", "day"]
@@ -207,6 +266,7 @@ def predict_week():
     except Exception as e:
         print("Prediction error:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 ## Define a route for log in ##

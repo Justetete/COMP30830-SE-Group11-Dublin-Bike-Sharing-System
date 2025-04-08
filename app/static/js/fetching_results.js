@@ -69,14 +69,29 @@ function drawWeeklyPredictionChart(stationId) {
             });
 
             // Chart display options
+            // const options = {
+            //     title: 'Weekly Bike Availability Prediction',
+            //     legend: { position: 'bottom' },
+            //     curveType: 'function',
+            //     hAxis: { format: 'MM/dd HH:mm' },
+            //     vAxis: { minValue: 0 },
+            //     height: 300
+            // };
             const options = {
-                title: 'Weekly Bike Availability Prediction',
+                title: 'Predicted Available Bikes (Next 7 Days)',
                 legend: { position: 'bottom' },
                 curveType: 'function',
-                hAxis: { format: 'MM/dd HH:mm' },
-                vAxis: { minValue: 0 },
-                height: 300
+                hAxis: {
+                    format: 'MMM/dd',
+                    slantedText: true,
+                    slantedTextAngle: 20,
+                    textStyle: { fontSize: 10 },
+                    gridlines: { count: 7 },
+                },
+                vAxis: { title: 'Available Bikes', minValue: 0 },
+                height: 280
             };
+            
 
             // Draw the chart in the designated HTML container
             const chart = new google.visualization.LineChart(

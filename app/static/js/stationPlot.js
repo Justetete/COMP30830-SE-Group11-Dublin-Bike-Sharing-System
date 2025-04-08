@@ -106,6 +106,7 @@ function drawDailyTrendChart(stationId) {
             format: 'HH:mm',
             slantedText: true,
             slantedTextAngle: 20,
+            showTextEvery: 4,
           },
           vAxis: {
             viewWindow: {
@@ -118,6 +119,7 @@ function drawDailyTrendChart(stationId) {
           },
           colors: ['#e74c3c', '#2980b9'],
           height: 280,
+          weight: '100%',
         };
 
         const chart = new google.visualization.LineChart(
