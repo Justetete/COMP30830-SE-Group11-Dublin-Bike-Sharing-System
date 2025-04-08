@@ -49,26 +49,26 @@ function drawWeeklyPredictionChart(stationId) {
 // ===============================
 // Draw Daily Station Trend Chart (Available Bikes & Stands)
 // ===============================
-function smoothData(rawData, windowSize = 5) {
-  const result = [];
-  for (let i = 0; i < rawData.length; i++) {
-    let totalBikes = 0, totalStands = 0, count = 0;
-    for (let j = -Math.floor(windowSize / 2); j <= Math.floor(windowSize / 2); j++) {
-      const idx = i + j;
-      if (idx >= 0 && idx < rawData.length) {
-        totalBikes += rawData[idx].bikes;
-        totalStands += rawData[idx].stands;
-        count++;
-      }
-    }
-    result.push({
-      time: new Date(rawData[i].last_update),
-      bikes: totalBikes / count,
-      stands: totalStands / count
-    });
-  }
-  return result;
-}
+// function smoothData(rawData, windowSize = 5) {
+//   const result = [];
+//   for (let i = 0; i < rawData.length; i++) {
+//     let totalBikes = 0, totalStands = 0, count = 0;
+//     for (let j = -Math.floor(windowSize / 2); j <= Math.floor(windowSize / 2); j++) {
+//       const idx = i + j;
+//       if (idx >= 0 && idx < rawData.length) {
+//         totalBikes += rawData[idx].bikes;
+//         totalStands += rawData[idx].stands;
+//         count++;
+//       }
+//     }
+//     result.push({
+//       time: new Date(rawData[i].last_update),
+//       bikes: totalBikes / count,
+//       stands: totalStands / count
+//     });
+//   }
+//   return result;
+// }
 
 function drawDailyTrendChart(stationId) {
   google.charts.load('current', { packages: ['corechart'] });
@@ -93,8 +93,6 @@ function drawDailyTrendChart(stationId) {
             entry.stands
           ]);
         });
-        
-      
 
         const options = {
           legend: { 
@@ -119,7 +117,7 @@ function drawDailyTrendChart(stationId) {
             minValue: 0
           },
           colors: ['#e74c3c', '#2980b9'],
-          height: 280
+          height: 280,
         };
 
         const chart = new google.visualization.LineChart(
