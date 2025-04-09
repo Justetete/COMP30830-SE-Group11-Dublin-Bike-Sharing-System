@@ -32,12 +32,12 @@ This project is designed to provide a dynamic and interactive web application th
   - Displays current weather conditions and forecast for bike stations.
 
 - **Data Management & Storage:**  
-  - Stores collected data in an Amazon RDS (MySQL) database.
+  - Stores collected data in a local MySQL database, previously an AWS RDS (code for this remains for wholeness of project).
   - Enables historical data analysis and machine learning model training.
 
 - **Interactive Map Display:**  
-  - Uses Google Maps to visualize bike stations.
-  - Marker colors and sizes encode real-time occupancy and availability.
+  - Visualizes all Dublin Bikes stations using Google Maps API.
+  - Each station is represented by a marker that can be clicked to reveal detailed station data.
   - Clicking on a station reveals detailed occupancy bar charts (hourly and daily) along with weather forecast data.
 
 - **Predictive Analytics:**  
@@ -47,13 +47,13 @@ This project is designed to provide a dynamic and interactive web application th
 - **Full-Stack Implementation:**  
   - Frontend developed using HTML, CSS, and JavaScript.
   - Backend API built with Python Flask, running on an EC2 instance.
-  - Automated data scraping from EC2 to feed the RDS MySQL database.
+  - Automated data scraping from EC2 to feed the RDS/local MySQL database.
 
 ## Technology Stack
 
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Python Flask (API)
-- **Database:** MySQL (hosted on Amazon RDS)
+- **Database:** MySQL (local, but could be hosted on Amazon RDS)
 - **Cloud Infrastructure:** AWS (EC2, RDS)
 - **APIs:** JCDecaux API for DublinBikes data, OpenWeather API for weather information, Firebase for Authentification
 - **Mapping:** Google Maps API
@@ -158,7 +158,7 @@ tests\test_suite.py        10      6    40%   17-31, 34-35
 TOTAL                     193     32    83%
 ```
 
-Database-related code connected to the RDS is excluded from this run, as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS, however the code still remains in the GitHub repo and works (once you start the AWS RDS). Instead to still provide testing under 'databases' I have included testing for parsing API data correctly and writing the expected contents to local .csv file
+Database-related code connected to the RDS is excluded from this run, as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS, however the code still remains in the GitHub repo and works (once you start the AWS RDS). Instead to still provide testing under 'databases' I have included testing for parsing API data correctly and writing the expected contents to local database
 
 ---
 
