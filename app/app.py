@@ -37,8 +37,8 @@ def initialize_firebase():
     firebase_admin.initialize_app(cred)
 
 ## Load the machine learning model
-model_filename = os.path.join(os.path.dirname(__file__), "Dubike_random_forest_model.joblib")
-with open(model_filename, "rb") as file:
+model_path = os.path.join(os.path.dirname(__file__), "machine_learning", "Dubike_random_forest_model.joblib")
+with open(model_path, "rb") as file:
     model = pickle.load(file)
 
 initialize_firebase()
@@ -151,64 +151,6 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-# @app.route("/predict_week", methods=["GET"])
-# def predict_week():
-#     try:
-#         station_id = request.args.get("station_id")
-#         if not station_id:
-#             return jsonify({"error": "Missing station_id"}), 400
-
-#         stations = fetch_bike_stations()
-#         station = next((s for s in stations if str(s["number"]) == str(station_id)), None)
-#         if not station:
-#             return jsonify({"error": "Station not found"}), 404
-
-#         lat = station["position"]["lat"]
-#         lon = station["position"]["lng"]
-
-#         url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=current,minutely,alerts&appid={OPENWEATHER_API_KEY}&units=metric"
-#         response = requests.get(url)
-#         if response.status_code != 200:
-#             return jsonify({"error": "Failed to fetch weather forecast"}), 500
-
-#         data = response.json()
-#         hourly_data = data.get("hourly", [])
-
-#         results = []
-#         for entry in hourly_data:
-#             from datetime import timezone
-#             timestamp = datetime.fromtimestamp(entry["dt"], tz=timezone.utc)
-#             hour = timestamp.hour
-#             day_of_week = timestamp.weekday()
-
-#             temp = entry.get("temp")
-#             humidity = entry.get("humidity")
-#             pressure = entry.get("pressure")
-
-#             input_features = [
-#                 int(station_id),
-#                 temp, temp,  # max_temperature, min_temperature
-#                 humidity,
-#                 pressure,
-#                 hour,
-#                 day_of_week
-#             ]
-
-#             columns = ["station_id", "max_temperature", "min_temperature", "humidity", "pressure", "hour", "day"]
-#             input_df = pd.DataFrame([input_features], columns=columns)
-#             predicted_bikes = float(model.predict(input_df)[0])
-
-#             results.append({
-#                 "time": timestamp.strftime("%Y-%m-%dT%H:%M:%S"),
-#                 "predicted_bikes": predicted_bikes
-#             })
-
-#         return jsonify(results)
-
-#     except Exception as e:
-#         print("Prediction error:", str(e))
-#         return jsonify({"error": str(e)}), 500
-    
 @app.route("/predict_week", methods=["GET"])
 def predict_week():
     try:
@@ -267,8 +209,6 @@ def predict_week():
     except Exception as e:
         print("Prediction error:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
 
 ## Define a route for log in ##
 
