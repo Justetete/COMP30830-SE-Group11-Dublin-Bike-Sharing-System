@@ -37,7 +37,7 @@ def initialize_firebase():
     firebase_admin.initialize_app(cred)
 
 ## Load the machine learning model
-model_filename = 'Dubike_random_forest_model.joblib'
+model_filename = os.path.join(os.path.dirname(__file__), "Dubike_random_forest_model.joblib")
 with open(model_filename, "rb") as file:
     model = pickle.load(file)
 
