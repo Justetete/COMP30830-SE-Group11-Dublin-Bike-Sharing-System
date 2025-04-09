@@ -15,6 +15,9 @@ from tests.app.test_app import TestFlaskApp
 from tests.database.test_jcdecauxapi_to_file import TestJCDecauxToFile
 from tests.database.test_openweatherapi_to_file import TestOpenWeatherToFile
 
+# Machine learning prediction test
+from tests.machine_learning.test_prediction import TestMLPrediction
+
 def suite():
     """
     Creates a test suite that aggregates individual test cases.
@@ -36,6 +39,9 @@ def suite():
     # File-based database logic testing is included
     test_suite.addTest(unittest.makeSuite(TestJCDecauxToFile))
     test_suite.addTest(unittest.makeSuite(TestOpenWeatherToFile))
+
+    # ML prediction tests
+    test_suite.addTest(unittest.makeSuite(TestMLPrediction))
 
     return test_suite
 
