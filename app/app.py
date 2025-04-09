@@ -32,7 +32,7 @@ BIKE_API_URL = f"https://api.jcdecaux.com/vls/v1/stations?contract={CONTRACT}&ap
 
 # Initialize Firebase Admin SDK
 def initialize_firebase():
-    cred_path = os.path.join(os.path.dirname(__file__), "dublin-bikes-bc821-firebase-adminsdk-fbsvc-6b3b526527.json")
+    cred_path = os.path.join(os.path.dirname(__file__), "dublinbikes-firebase-config.json")
     cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)
 
