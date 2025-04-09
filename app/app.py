@@ -68,7 +68,7 @@ def dashboard():
 
 # history_station data is recorded in 2025/04/06
 csv_path = os.path.join(os.path.dirname(__file__), "Historial_Station_Information.csv")
-HISTORY_DF = pd.read_csv(csv_path))
+HISTORY_DF = pd.read_csv(csv_path)
 
 try:
     HISTORY_DF['last_update'] = pd.to_datetime(HISTORY_DF['last_update'])
