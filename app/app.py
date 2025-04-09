@@ -67,7 +67,8 @@ def dashboard():
     return render_template("index.html", title="Dublin Bikes", stations=bike_stations, google_maps_api_key=GOOGLE_MAPS_API_KEY, first_name=first_name)
 
 # history_station data is recorded in 2025/04/06
-HISTORY_DF = pd.read_csv("Historial_Station_Information.csv")
+csv_path = os.path.join(os.path.dirname(__file__), "Historial_Station_Information.csv")
+HISTORY_DF = pd.read_csv(csv_path))
 
 try:
     HISTORY_DF['last_update'] = pd.to_datetime(HISTORY_DF['last_update'])
