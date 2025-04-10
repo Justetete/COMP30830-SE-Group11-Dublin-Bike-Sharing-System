@@ -10,14 +10,14 @@ import pickle
 from firebase_admin import credentials, auth
 import numpy as np
 from sqlalchemy import create_engine
-from database import JCD_DB_Info
+from database import JCD_DB_Info, JCD_DB_local
 
 # Please first import the sql file in database folder!
-USER = JCD_DB_Info.USER
-PASSWORD = JCD_DB_Info.PASSWORD
-PORT = JCD_DB_Info.PORT
-DB = JCD_DB_Info.DB
-URI = JCD_DB_Info.URI
+USER = JCD_DB_local.USER
+PASSWORD = JCD_DB_local.PASSWORD
+PORT = JCD_DB_local.PORT
+DB = JCD_DB_local.DB
+URI = JCD_DB_local.URI
 
 connection_string = f"mysql+pymysql://{USER}:{PASSWORD}@{URI}:{PORT}/{DB}"
 engine = create_engine(connection_string, echo=True)
