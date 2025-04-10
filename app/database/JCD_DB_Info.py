@@ -1,4 +1,4 @@
-#The Amazon AWS RDS information for connecting to the Database
+# MySql database information
 
 USER = 'mark' #user name
 PASSWORD = 'Johndeere10!' #password
