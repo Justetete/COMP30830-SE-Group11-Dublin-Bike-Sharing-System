@@ -9,6 +9,27 @@ from datetime import datetime
 import pickle
 from firebase_admin import credentials, auth
 import numpy as np
+from sqlalchemy import create_engine
+from database import JCD_DB_Info
+
+# Please first import the sql file in database folder!
+USER = JCD_DB_Info.USER
+PASSWORD = JCD_DB_Info.PASSWORD
+PORT = JCD_DB_Info.PORT
+DB = JCD_DB_Info.DB
+URI = JCD_DB_Info.URI
+
+connection_string = f"mysql+pymysql://{USER}:{PASSWORD}@{URI}:{PORT}/{DB}"
+engine = create_engine(connection_string, echo=True)
+
+# Load historical data from MySQL
+query = f"""
+    SELECT number, available_bikes, available_bike_stands, last_update, status
+    FROM daily_trends"""
+
+HISTORY_DF = pd.read_sql(query, con=engine)
+HISTORY_DF['last_update'] = pd.to_datetime(HISTORY_DF['last_update'], errors='coerce')
+HISTORY_DF.dropna(subset=['last_update'], inplace=True)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -66,36 +87,23 @@ def dashboard():
     bike_stations = fetch_bike_stations()
     return render_template("index.html", title="Dublin Bikes", stations=bike_stations, google_maps_api_key=GOOGLE_MAPS_API_KEY, first_name=first_name)
 
-# history_station data is recorded in 2025/04/06
-csv_path = os.path.join(os.path.dirname(__file__), "Historial_Station_Information.csv")
-HISTORY_DF = pd.read_csv(csv_path)
-
-try:
-    HISTORY_DF['last_update'] = pd.to_datetime(HISTORY_DF['last_update'])
-except Exception as e:
-    print(f"Error converting date: {e}")
-
 @app.route("/api/station_history")
 def get_station_history():
     station_id = request.args.get("station_id")
-    target_date = request.args.get("date", None) 
-
     if not station_id:
         return jsonify({"error": "Missing station_id"}), 400
 
-    station_id = int(station_id)
-    if target_date:
-        target_date = pd.to_datetime(target_date).date()
-    else:
-        target_date = HISTORY_DF['last_update'].dt.date.max()
+    try:
+        station_id = int(station_id)
+    except ValueError:
+        return jsonify({"error": "Invalid station_id"}), 400
 
-    filtered_data = HISTORY_DF[
-    (HISTORY_DF['number'] == station_id) &
-    (HISTORY_DF['last_update'].dt.normalize() == pd.to_datetime(target_date))
-]
+    filtered_df = HISTORY_DF[HISTORY_DF["number"] == station_id].copy()
+
+    filtered_df = filtered_df.sort_values("last_update")
 
     result = []
-    for _, row in filtered_data.iterrows():
+    for _, row in filtered_df.iterrows():
         result.append({
             "time": row["last_update"].strftime("%Y-%m-%dT%H:%M:%S"),
             "bikes": row["available_bikes"],
@@ -103,7 +111,6 @@ def get_station_history():
         })
 
     return jsonify(result)
-
 
 ## Define a route for predictions ## 
 @app.route("/predict", methods=["GET"])
