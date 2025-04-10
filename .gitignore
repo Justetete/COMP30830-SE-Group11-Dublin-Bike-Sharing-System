@@ -8,7 +8,6 @@ JCD_DB_Info.py
 OpenWeather_API_Info.py
 firebase-config.js
 .DS_Store
-JCD_DB_local.py
 JCDecauxAPI_to_DB_copy.py
 JCD_API_Info.cpython-313.pyc
 JCD_DB_local.cpython-313.pyc
