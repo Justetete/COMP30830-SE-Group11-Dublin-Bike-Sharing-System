@@ -2,13 +2,11 @@
 config.json
 .env
 settings.ini
-dublin-bikes-bc821-firebase-adminsdk-fbsvc-*.json
+dublinbikes-firebase-config.json
 JCD_API_Info.py
 JCD_DB_Info.py
 OpenWeather_API_Info.py
 firebase-config.js
 .DS_Store
-JCDecauxAPI_to_DB_copy.py
-JCD_API_Info.cpython-313.pyc
-JCD_DB_local.cpython-313.pyc
+__pycache__
 
