@@ -80,8 +80,8 @@ repo/
 
 1. **Clone the Repository:**
   ```bash
-  git clone https://github.com/your-repo/DublinBikeSharing.git
-  cd DublinBikeSharing
+  git clone https://github.com/Justetete/COMP30830-SE-Group11-Dublin-Bike-Sharing-System
+  cd COMP30830-SE-Group11-Dublin-Bike-Sharing-System
   ```
     
 2. **Setup Virtual Environment for Python**
@@ -101,7 +101,7 @@ source venv/bin/activate
 venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r pip_comp30830_requirements.txt
 ```
 
 3. **Running the Application**
