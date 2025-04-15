@@ -52,7 +52,7 @@ This project is designed to provide a dynamic and interactive web application th
   - Automated data scraping from EC2 to feed the local MySQL database.
  
 - **protocol**
-- [ ] add the wireframe for our website
+<img src="docs/img/Project prototype.jpeg">
 
 - **Interface**
 - [ ] add the main screenshot of the website
