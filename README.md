@@ -19,10 +19,9 @@ This project is designed to provide a dynamic and interactive web application th
 
 ## Group Members
 
-- [ ] add the each one's github page
-- Jian, Xinchi
-- Kavanagh, Alex
-- Tully, Mark: [Git hub]([https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white](https://github.com/mtully-64))
+- Jian, Xinchi: [Github](https://github.com/Justetete)
+- Kavanagh, Alex: [Github](https://github.com/AlexanderKav)
+- Tully, Mark: [Github](https://github.com/mtully-64)
 
 ## Features
 
