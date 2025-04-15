@@ -15,7 +15,7 @@
 
 This project is designed to provide a dynamic and interactive web application that displays real-time Dublin Bikes station occupancy information along with weather updates and predictive analytics. By integrating data from JCDecaux (DublinBikes) and OpenWeather APIs, the application provides users with a comprehensive view of bike station statuses and anticipated occupancy trends.
 
-- [ ] add the architecture of the application
+<img src="docs/img/Architecture.jpeg">
 
 ## Group Members
 
@@ -24,6 +24,9 @@ This project is designed to provide a dynamic and interactive web application th
 - Tully, Mark: [Github](https://github.com/mtully-64)
 
 ## Features
+
+- **Interface**
+<img src="docs/img/Main interface.jpeg">
 
 - **Dynamic Data Collection:**  
   - Collects live "DublinBikes" station occupancy data from the JCDecaux API.
@@ -50,12 +53,7 @@ This project is designed to provide a dynamic and interactive web application th
   - Frontend developed using HTML, CSS, and JavaScript.
   - Backend API built with Python Flask, running on an EC2 instance.
   - Automated data scraping from EC2 to feed the local MySQL database.
- 
-- **protocol**
-<img src="docs/img/Project prototype.jpeg">
 
-- **Interface**
-- [ ] add the main screenshot of the website
 
 ## Technology Stack
 
@@ -76,11 +74,30 @@ repo/
 │   ├── config.json             # App configuration
 │   ├── dublin-bikes-bc821-firebase*.json                  # Firebase credentials
 │   ├── templates/              # HTML templates
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   └── sign-up.html
 │   └── static/              # Frontend - JavaScript (auth, map, weather, etc.) & CSS
+│       ├── imgs/
+│       │   ├── bike-maker.png
+│       │   └── logo2.png
+│       ├── js/
+│       │   ├── auth.js
+│       │   ├── fetching_results.js
+│       │   ├── firebase-config.js
+│       │   ├── main.js
+│       │   ├── map.js
+│       │   ├── stationPlot.js
+│       │   └── weather.js
+│       └── styles.css
 ├── tests/
 │   ├── app/                    # Flask app route/API tests
 │   └── database/              # Unit tests for DB ingestion python files
 ├── docs/                       # Project documentation
+│   └── img/                   # Store relative pictures for the project
+│       ├──Architecture.jpeg          
+│       ├──Main interface.jpeg       
+│       └──Project prototype.jpeg    
 └── README.md
 ```
 
