@@ -9,10 +9,10 @@ This document provides a combined overview of the test suite implemented for the
 
 The project includes a unified test suite that brings together:
 - **Application-level tests** for Flask routes, APIs, and authentication
-- **Database module tests** for data insertion logic from local file-based simulations instead of RDS access
+- **Local SQL database modules** for station, availability, and weather records
 - **Machine Learning model tests** for prediction accuracy and model loading
 
-The test suite is organized under the `tests/` directory, with each module structured to reflect its purpose. Tests are implemented using Python's built-in `unittest` framework, with extensive use of mocking (`unittest.mock`) to isolate functionality and avoid dependence on live services or a real database.
+The test suite is organized under the `tests/` directory, with each module structured to reflect its purpose. Tests are implemented using Python's built-in `unittest` framework, with extensive use of mocking (`unittest.mock`) to isolate functionality and avoid dependence on live services.
 
 ---
 
@@ -23,55 +23,53 @@ tests/
 ├── app/
 │   └── test_app.py                         # Flask app and API endpoint tests
 ├── database/
-│   ├── test_jcdecaux_db.py                # Excluded due to RDS Suspension
-│   ├── test_openweather_db.py             # Excluded due to RDS Suspension
-│   ├── test_jcdecauxapi_to_db.py          # Excluded due to RDS Suspension
-│   ├── test_openweatherapi_to_db.py       # Excluded due to RDS Suspension
-│   ├── test_jcdecauxapi_to_file.py        # File-based JCDecaux transformation logic test
-│   └── test_openweatherapi_to_file.py     # File-based weather transformation logic test
+│   ├── test_jcdecaux_db.py                # Local SQL station + availability table creation test
+│   ├── test_openweather_db.py             # Local SQL weather + forecast schema test
+│   ├── test_jcdecauxapi_to_db.py          # JCDecaux station + availability insertion logic
+│   ├── test_openweatherapi_to_db.py       # Weather and forecast ingestion into SQL
+│   ├── test_jcdecauxapi_to_file.py        # 12 hour file scrapping for JCDecaux data
+│   └── test_openweatherapi_to_file.py     # 12 hour file scrapping for weather data
 ├── machine_learning/
 │   └── test_prediction.py                 # ML model loading and prediction tests
-└── test_suite.py                          # Aggregates test cases into one suite
+└── test_suite.py                          # Aggregates all tests into a unified suite
+
 ```
-
-> Database tests previously targeting RDS (`test_jcdecaux_db.py`, etc.) are now commented out under instruction to suspend AWS resources.
-
 ---
 
 ## Included Test Types
 
-### Flask App Tests (test_app.py)
-- Routing and session redirect behavior
-- API responses: `/api/bike_stations`, `/api/weather`, `/api/google-maps-key`, etc.
-- Authentication handling with Firebase (mocked)
-- Login, logout, and dashboard access flow
+### Flask App Tests
+- Tests core API endpoints such as `/api/bike_stations`, `/api/weather`, `/login`, and `/dashboard`
+- Verifies token-based route protection using mocked Firebase credentials
+- Includes both positive and negative test cases for session handling and redirection
 
-### File-Based Database Logic Tests
-- **JCDecaux Transformation Test**: Verifies station/availability parsing and file output logic
-- **OpenWeather Transformation Test**: Confirms weather forecast handling, structure parsing, and simulated insertions
-- Mocks the file I/O and API response structures for reliability without external calls
+### Local SQL Database Logic
+- `test_jcdecaux_db.py`: Validates SQL schema creation for `station` and `availability`
+- `test_jcdecauxapi_to_db.py`: Simulates inserting live station data (mocked API + DB)
+- `test_openweatherapi_to_db.py`: Inserts current and forecast weather based on station coordinates
+- `*_to_file.py`: Tests fallback behavior for 12hr local scraping
 
-### Machine Learning Model Tests
-- Validates that the model file (`Dubike_random_forest_model.joblib`) loads correctly
-- Ensures the model produces a numeric output given valid feature input
-- Checks proper handling of invalid input dimensions
-- Simulates prediction logic as used in API routes
+### Machine Learning Tests
+- Loads the `Dubike_random_forest_model.joblib` prediction model
+- Ensures numeric predictions are returned with valid features
+- Verifies rejection of malformed or incomplete input data
+- All test paths simulate realistic model interactions used in the live backend
 
 ---
 
 ## Running the Suite
 
-The test suite is bundled into `tests/test_suite.py`. Run from the project root:
+To run all tests from the project root:
 
 ```bash
 python -m tests.test_suite
 ```
 
-This will run:
-- All Flask app tests (enabled by default)
-- File-based database logic tests (enabled)
-- ML prediction tests
-- Commented-out RDS tests (available if re-enabled)
+This will execute:
+- All Flask app tests
+- Database schema and data-insertion tests (local SQL)
+- Machine learning prediction tests
+- 12 hour API scraping for JSON file output
 
 ---
 
@@ -87,22 +85,24 @@ coverage report -m
 Example output:
 
 ```
-Name                                      Stmts   Miss  Cover
---------------------------------------------------------------
-app/app.py                                  108     25    77%
-tests/app/test_app.py                        75      1    99%
-tests/database/test_jcdecauxapi_to_file.py   35      0   100%
-tests/database/test_openweatherapi_to_file.py36      0   100%
-tests/machine_learning/test_prediction.py    28      0   100%
-tests/test_suite.py                          14      0   100%
---------------------------------------------------------------
-TOTAL                                       296     26    91%
-```
+Name                                        Stmts   Miss  Cover
+---------------------------------------------------------------
+app/app.py                                    112     18    84%
+tests/app/test_app.py                          75      0   100%
+tests/database/test_jcdecaux_db.py             33      1    97%
+tests/database/test_jcdecauxapi_to_db.py       41      0   100%
+tests/database/test_jcdecauxapi_to_file.py     35      0   100%
+tests/database/test_openweatherapi_to_db.py    38      2    95%
+tests/database/test_openweatherapi_to_file.py  36      0   100%
+tests/machine_learning/test_prediction.py      29      0   100%
+tests/test_suite.py                            14      0   100%
+---------------------------------------------------------------
+TOTAL                                         413     21    92%
 
-> Note: Database modules interacting with RDS are excluded unless uncommented in the suite.
+```
 
 ---
 
 ## Conclusion
 
-This modular test suite ensures comprehensive test coverage across the backend, machine learning model, and data handling logic. With the switch to local file mocking and use of model testing, the project remains robust, testable, and AWS-independent while maintaining production-level logic readiness.
+The test suite achieves 92% line coverage and thoroughly validates the system across its key technical domains. With database mocking, offline fallback logic, and predictive analytics verification, this setup ensures maintainability, test isolation, and production-aligned behavior for real-time operations in the Dublin Bike Sharing System.
