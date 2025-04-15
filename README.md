@@ -15,8 +15,11 @@
 
 This project is designed to provide a dynamic and interactive web application that displays real-time Dublin Bikes station occupancy information along with weather updates and predictive analytics. By integrating data from JCDecaux (DublinBikes) and OpenWeather APIs, the application provides users with a comprehensive view of bike station statuses and anticipated occupancy trends.
 
+- [ ] add the architecture of the application
+
 ## Group Members
 
+- [ ] add the each one's github page
 - Jian, Xinchi
 - Kavanagh, Alex
 - Tully, Mark
@@ -24,8 +27,8 @@ This project is designed to provide a dynamic and interactive web application th
 ## Features
 
 - **Dynamic Data Collection:**  
-  - Collects live "DublinBikes" station occupancy data from the JCDecaux API every 5 minutes.
-  - Aggregates several weeks of continuous data for robust analytics.
+  - Collects live "DublinBikes" station occupancy data from the JCDecaux API.
+  - Aggregates several days of continuous histroical data for robust analytics.
 
 - **Weather Integration:**  
   - Retrieves weather data from the OpenWeather API on an hourly basis.
@@ -48,6 +51,12 @@ This project is designed to provide a dynamic and interactive web application th
   - Frontend developed using HTML, CSS, and JavaScript.
   - Backend API built with Python Flask, running on an EC2 instance.
   - Automated data scraping from EC2 to feed the local MySQL database.
+ 
+- **protocol**
+- [ ] add the wireframe for our website
+
+- **Interface**
+- [ ] add the main screenshot of the website
 
 ## Technology Stack
 
