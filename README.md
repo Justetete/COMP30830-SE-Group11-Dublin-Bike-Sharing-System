@@ -4,6 +4,7 @@
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Group Members](#group-members)
+- [Teamwork documents](#Teamwork-documents)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Project Structure](#project-structure)
@@ -23,6 +24,16 @@ This project is designed to provide a dynamic and interactive web application th
 - Kavanagh, Alex: [Github](https://github.com/AlexanderKav)
 - Tully, Mark: [Github](https://github.com/mtully-64)
 
+## Teamwork documents
+- [Prouctbacklog](https://docs.google.com/spreadsheets/d/16UwcQbcadPkZ1scV0lyiCs6AiAEB3XSC/edit?usp=drive_link&ouid=112237875983919582220&rtpof=true&sd=true)
+- [Prototype](https://docs.google.com/document/d/18HzMUOzncuRlrWLbt86iPlJQJVkGYof_qcaVSPj_3qQ/edit?usp=drive_link)
+- [Final-Report](https://docs.google.com/document/d/1rypzkfCm6ORaso-Ue8xvx0rVFUfZegF0/edit?usp=drive_link&ouid=112237875983919582220&rtpof=true&sd=true)
+- Agile development sprint
+  - [Sprint-1](https://drive.google.com/drive/folders/1cOePYkNI5SOnX8Wt5xpU7auCBZ7IjExV?usp=drive_link)
+  - [Sprint-2](https://drive.google.com/drive/folders/1EhuQown5CMib7F2gshE2jy7KILHeMOCB?usp=drive_link)
+  - [Sprint-3](https://drive.google.com/drive/folders/1oPnUb2GUzWE3CH_Oz26h06Tw-1sEMq39?usp=drive_link)
+  - [Sprint-4](https://drive.google.com/drive/folders/1rfaSWSQU1ckKcTg9-zLnsermO858Qoby?usp=drive_link)
+
 ## Features
 
 - **Interface**
@@ -33,7 +44,7 @@ This project is designed to provide a dynamic and interactive web application th
   - Aggregates several days of continuous histroical data for robust analytics.
 
 - **Weather Integration:**  
-  - Retrieves weather data from the OpenWeather API on an hourly basis.
+  - Retrieves weather data from the OpenWeather API.
   - Displays current weather conditions and forecast for bike stations.
 
 - **Data Management & Storage:**  
@@ -42,8 +53,8 @@ This project is designed to provide a dynamic and interactive web application th
 
 - **Interactive Map Display:**  
   - Visualizes all Dublin Bikes stations using Google Maps API.
-  - Each station is represented by a marker that can be clicked to reveal detailed station data.
-  - Clicking on a station reveals detailed occupancy bar charts (hourly and daily) along with weather forecast data.
+  - Each station is represented by a marker that can be hovered and clicked to reveal detailed station data.
+  - Clicking on a station reveals current detailed occupancy bar charts and daily usage trends along with weather forecast data.
 
 - **Predictive Analytics:**  
   - Implements a machine learning model to predict station occupancy based on historical data and weather patterns.
@@ -77,19 +88,22 @@ repo/
 │   │   ├── index.html
 │   │   ├── login.html
 │   │   └── sign-up.html
-│   └── static/              # Frontend - JavaScript (auth, map, weather, etc.) & CSS
-│       ├── imgs/
-│       │   ├── bike-maker.png
-│       │   └── logo2.png
-│       ├── js/
-│       │   ├── auth.js
-│       │   ├── fetching_results.js
-│       │   ├── firebase-config.js
-│       │   ├── main.js
-│       │   ├── map.js
-│       │   ├── stationPlot.js
-│       │   └── weather.js
-│       └── styles.css
+│   ├── static/              # Frontend - JavaScript (auth, map, weather, etc.) & CSS
+│   │   ├── imgs/
+│   │   │   ├── bike-maker.png
+│   │   │   └── logo2.png
+│   │   ├── js/
+│   │   │   ├── auth.js
+│   │   │   ├── fetching_results.js
+│   │   │   ├── firebase-config.js
+│   │   │   ├── main.js
+│   │   │   ├── map.js
+│   │   │   ├── stationPlot.js
+│   │   │   └── weather.js
+│   │   └── styles.css
+│   └── machine_learning/
+│       ├── Dubike_random_forest_model.joblib
+│       └── machine_learning.ipynb
 ├── tests/
 │   ├── app/                    # Flask app route/API tests
 │   └── database/              # Unit tests for DB ingestion python files
