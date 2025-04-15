@@ -54,7 +54,7 @@ This project is designed to provide a dynamic and interactive web application th
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Python Flask (API)
 - **Database:** MySQL (local, but could be hosted on Amazon RDS)
-- **Cloud Infrastructure:** AWS (EC2, RDS)
+- **Cloud Infrastructure:** AWS - EC2
 - **APIs:** JCDecaux API for DublinBikes data, OpenWeather API for weather information, Firebase for Authentification
 - **Mapping:** Google Maps API
 - **Machine Learning:** Python libraries for training and predictions
