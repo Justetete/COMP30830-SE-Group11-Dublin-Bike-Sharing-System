@@ -83,7 +83,7 @@ repo/
 ├── app/
 │   ├── app.py                  # Flask entry point
 │   ├── config.json             # App configuration
-│   ├── dublin-bikes-bc821-firebase*.json                  # Firebase credentials
+│   ├── dublinbikes-firebase-config.json                  # Firebase credentials (private)
 │   ├── templates/              # HTML templates
 │   │   ├── index.html
 │   │   ├── login.html
@@ -95,7 +95,7 @@ repo/
 │   │   ├── js/
 │   │   │   ├── auth.js
 │   │   │   ├── fetching_results.js
-│   │   │   ├── firebase-config.js
+│   │   │   ├── firebase-config.js  # Firebase config settings (private)
 │   │   │   ├── main.js
 │   │   │   ├── map.js
 │   │   │   ├── stationPlot.js
@@ -105,14 +105,25 @@ repo/
 │       ├── Dubike_random_forest_model.joblib
 │       └── machine_learning.ipynb
 ├── tests/
-│   ├── app/                    # Flask app route/API tests
-│   └── database/              # Unit tests for DB ingestion python files
+│   ├── app/                                     # Flask API & routing tests
+│   │   └── test_app.py                          # Full route coverage and session handling
+│   ├── machine_learning/                        # ML model validation tests
+│   │   └── test_prediction.py                   # Load, predict, handle invalid input
+│   └── database/                                # Database ingestion and fallback logic
+│       ├── test_jcdecaux_db.py                  # Table creation for stations & availability
+│       ├── test_jcdecauxapi_to_db.py            # JCDecaux insertion into SQL
+│       ├── test_jcdecauxapi_to_file.py          # JSON API Scrapping 12 hour test
+│       ├── test_openweather_db.py               # Weather table SQL execution
+│       ├── test_openweatherapi_to_db.py         # Weather & forecast API SQL insert logic
+│       └── test_openweatherapi_to_file.py       # JSON API Scrapping 12 hour test
+│   └── test_suite.py                            # Aggregates and runs all test modules
 ├── docs/                       # Project documentation
 │   └── img/                   # Store relative pictures for the project
 │       ├──Architecture.jpeg          
 │       ├──Main interface.jpeg       
 │       └──Project prototype.jpeg    
 └── README.md
+
 ```
 
 ## Installation and Setup
@@ -188,16 +199,21 @@ coverage report -m
 ### Coverage Report
 
 ```
-Name                    Stmts   Miss  Cover   Missing
------------------------------------------------------
-app\app.py                108     25    77%   47, 75-95, 103-110, 166-167, 182-183, 190, 194
-tests\app\test_app.py     75      1    99%   106
-tests\test_suite.py        10      6    40%   17-31, 34-35
------------------------------------------------------
-TOTAL                     193     32    83%
-```
+Name                                        Stmts   Miss  Cover
+---------------------------------------------------------------
+app/app.py                                    112     18    84%
+tests/app/test_app.py                          75      0   100%
+tests/database/test_jcdecaux_db.py             33      1    97%
+tests/database/test_jcdecauxapi_to_db.py       41      0   100%
+tests/database/test_jcdecauxapi_to_file.py     35      0   100%
+tests/database/test_openweatherapi_to_db.py    38      2    95%
+tests/database/test_openweatherapi_to_file.py  36      0   100%
+tests/machine_learning/test_prediction.py      29      0   100%
+tests/test_suite.py                            14      0   100%
+---------------------------------------------------------------
+TOTAL                                         413     21    92%
 
-Database-related code connected to the RDS is excluded from this run, as database tests are currently commented out in the suite. This is done under Alessio's instruction to stop the AWS RDS, however the code still remains in the GitHub repo and works (once you start the AWS RDS). Instead to still provide testing under 'databases' I have included testing for parsing API data correctly and writing the expected contents to local database
+```
 
 ---
 
