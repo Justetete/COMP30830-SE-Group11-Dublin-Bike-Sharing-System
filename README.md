@@ -22,7 +22,7 @@ This project is designed to provide a dynamic and interactive web application th
 - [ ] add the each one's github page
 - Jian, Xinchi
 - Kavanagh, Alex
-- Tully, Mark
+- Tully, Mark: [Git hub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
 
 ## Features
 
