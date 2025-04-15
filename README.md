@@ -47,7 +47,7 @@ This project is designed to provide a dynamic and interactive web application th
 - **Full-Stack Implementation:**  
   - Frontend developed using HTML, CSS, and JavaScript.
   - Backend API built with Python Flask, running on an EC2 instance.
-  - Automated data scraping from EC2 to feed the RDS/local MySQL database.
+  - Automated data scraping from EC2 to feed the local MySQL database.
 
 ## Technology Stack
 
