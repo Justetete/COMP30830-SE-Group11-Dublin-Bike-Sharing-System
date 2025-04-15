@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest.mock import mock_open, patch
 
-# Add the database module to the path so we can import from app/database/
+# Add the database module to the import path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'app', 'database')))
 
 from JCDecauxAPI_to_DB import stations_to_db  # Import the target function
@@ -11,14 +11,13 @@ from JCDecauxAPI_to_DB import stations_to_db  # Import the target function
 
 class TestJCDecauxToFile(unittest.TestCase):
     """
-    This test case verifies that the stations_to_db function correctly
-    handles JSON input and writes it to a local file, simulating the
-    expected behavior when database access is disabled.
+    Unit test for JCDecauxAPI_to_DB.stations_to_db when no database engine is provided.
+    Verifies that the function falls back to writing parsed station data to a local file.
     """
 
     def setUp(self):
         """
-        Sample JCDecaux JSON payload used for testing.
+        Setup a sample JSON input string representing a valid JCDecaux API response.
         """
         self.sample_data = '''
         [
@@ -40,23 +39,24 @@ class TestJCDecauxToFile(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open)
     def test_writes_data_to_file(self, mock_file):
         """
-        Test that verifies the stations_to_db function attempts to write the parsed
-        station data to a file. This assumes the function has been refactored to
-        support file output rather than live database writing.
+        Test that verifies:
+        - open() is called when engine is None
+        - the file write operation occurs
+        - the output contains recognizable station information
         """
-        mock_engine = None  # Simulate that no DB connection is passed
+        mock_engine = None  # Simulate a missing database engine
         stations_to_db(self.sample_data, mock_engine)
 
-        # Ensure that open() was called — indicating a file write was attempted
+        # Assert that the file was opened (write mode)
         mock_file.assert_called()
 
-        # Verify that data was written to the file handle
+        # Retrieve the mock file handle and assert that write was called
         handle = mock_file()
-        self.assertTrue(handle.write.called)
+        self.assertTrue(handle.write.called, "Expected write to be called on file handle.")
 
-        # Combine all write calls and check that the expected station name appears
+        # Validate that expected station content appears in the written output
         written_data = ''.join(call.args[0] for call in handle.write.call_args_list)
-        self.assertIn("Station 42", written_data)
+        self.assertIn("Station 42", written_data, "Expected station name not found in written output.")
 
 
 if __name__ == "__main__":

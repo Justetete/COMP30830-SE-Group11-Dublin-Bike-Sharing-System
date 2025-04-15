@@ -1,54 +1,71 @@
 import sys
 import os
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
+import json
 
-# Make the path to the app/database directory so we can import JCDecaux_DB.py
+# Add the app/database directory to sys.path to enable imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'app', 'database')))
 
-# Import the module under test
-import JCDecaux_DB
+# Import the JCDecaux data insertion logic
+import JCDecauxAPI_to_DB
+
 
 class TestJCDecauxDB(unittest.TestCase):
     """
-    Unit tests for the JCDecaux_DB.py module.
-    These tests focus on verifying that SQL table creation statements
-    are correctly executed using a mocked SQLAlchemy engine connection.
+    Unit test for JCDecauxAPI_to_DB module.
+    This test verifies that the function stations_to_db correctly parses input JSON and triggers
+    appropriate SQL insertions for station and availability data using a mocked database engine.
     """
 
-    @patch("JCDecaux_DB.engine.connect")
-    def test_create_station_table(self, mock_connect):
+    def setUp(self):
         """
-        Test that the SQL for creating the 'station' table executes successfully.
-        The database engine's connect method is mocked to avoid hitting a real DB.
+        Prepare a sample JSON structure simulating a single station's data
+        as returned by the JCDecaux API.
         """
-        # Create a mock connection object
+        self.sample_data = json.dumps([
+            {
+                "number": 42,
+                "address": "Station Road",
+                "banking": True,
+                "bike_stands": 25,
+                "name": "Station 42",
+                "status": "OPEN",
+                "position": {"lat": 53.3, "lng": -6.2},
+                "available_bikes": 10,
+                "available_bike_stands": 15,
+                "last_update": 1700000000000
+            }
+        ])
+
+    def test_station_and_availability_insert(self):
+        """
+        Tests that the stations_to_db function:
+        - Connects to the DB using a transactional engine.begin() context
+        - Executes INSERT statements for both station and availability data
+        - Calls .execute() at least twice (once for station, once for availability)
+        """
+        # Mock SQLAlchemy engine and connection
+        mock_engine = MagicMock()
         mock_conn = MagicMock()
-        # Simulate the context manager behavior of engine.connect()
-        mock_connect.return_value.__enter__.return_value = mock_conn
 
-        # Execute the 'station' table SQL creation statement using the mock connection
-        JCDecaux_DB.station_sql.execute(mock_conn)
+        # Patch the engine.begin() context manager to return our mock connection
+        mock_engine.begin.return_value.__enter__.return_value = mock_conn
 
-        # Verify that the execute method was called at least once
-        mock_conn.execute.assert_called()
+        # Simulate station record not already existing
+        mock_conn.execute.return_value.scalar.return_value = 0
+        mock_conn.execute.return_value.rowcount = 1
 
-    @patch("JCDecaux_DB.engine.connect")
-    def test_create_availability_table(self, mock_connect):
-        """
-        Test that the SQL for creating the 'availability' table executes successfully.
-        Again, the connection is mocked to isolate the test from any real DB activity.
-        """
-        # Create a mock connection object
-        mock_conn = MagicMock()
-        # Simulate the context manager behavior of engine.connect()
-        mock_connect.return_value.__enter__.return_value = mock_conn
+        # Call the target function
+        JCDecauxAPI_to_DB.stations_to_db(self.sample_data, mock_engine)
 
-        # Execute the 'availability' table SQL creation statement using the mock connection
-        JCDecaux_DB.availability_sql.execute(mock_conn)
+        # Assertions
+        self.assertTrue(mock_conn.execute.called, "Database execute method was not called.")
+        self.assertGreaterEqual(
+            mock_conn.execute.call_count, 2,
+            "Expected at least 2 calls: one for station insert, one for availability insert."
+        )
 
-        # Verify that the execute method was called at least once
-        mock_conn.execute.assert_called()
 
 if __name__ == "__main__":
     unittest.main()
