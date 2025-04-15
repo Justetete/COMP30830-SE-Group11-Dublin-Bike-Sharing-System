@@ -12,7 +12,7 @@ import OpenWeather_DB
 class TestOpenWeatherDB(unittest.TestCase):
     """
     Unit tests for the OpenWeather_DB.py module.
-    These tests confirm that the SQL creation statements for weather-related tables
+    These tests confirm that the SQL creation statements for weather-related tables in the local SQL database
     are executed correctly using a mocked database connection.
     """
 

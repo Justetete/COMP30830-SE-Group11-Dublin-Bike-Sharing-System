@@ -3,9 +3,9 @@
 
 This document details the testing efforts specifically focused on the **database modules** inside the `app/database/` directory of the project.
 
-Due to the suspension of the Amazon RDS instance,
-the project now uses local file outputs to simulate and validate data ingestion logic. However, previous testing and files still remain in this repo and run when the Amazon RDS is turned on (left in repo for clarity and wholeness, only omitted due to cost).
+Due to the suspension of the Amazon RDS instance, the project now uses both local file outputs to simulate and validate data ingestion logic, as well as a local SQL database.
 
+All tests are executed using mocked database connections, avoiding the need for a live SQL instance while preserving coverage and correctness of logic.
 ---
 
 ## Test Types Performed
@@ -18,57 +18,51 @@ The following tests were designed to validate the core functionality of the data
   - `patch()` to fake external API responses and keys
 
 - **Assertions**:
-  - `mock_file.assert_called()` ensures write was triggered
-  - `handle.write.call_args_list` allows checking actual content
-  - `mock_conn.execute.call_count` verifies row generation (even without DB)
+  - `mock_conn.execute.call_count` ensures that SQL statements are triggered
+  - `scalar.return_value` is used to simulate pre-insertion checks (e.g., duplicates)
+  - `write.call_args_list` confirms file output matches expectations
 
 ---
 
 ## Targeted Modules
 
-| Module                      | Description                                        |
-|----------------------------|----------------------------------------------------|
-| `JCDecaux_DB.py`           | Sets up `station` and `availability` tables       |
-| `OpenWeather_DB.py`        | Sets up `current_weather` and `daily_forecast` tables   |
-| `JCDecauxAPI_to_DB.py`     | Parses JCDecaux JSON data and inserts into tables |
-| `OpenWeatherAPI_to_DB.py`  | Combines station + weather data for DB insertion  |
+| Module                      | Description                                                  |
+|----------------------------|--------------------------------------------------------------|
+| `JCDecaux_DB.py`           | Defines SQL schema for stations and availability             |
+| `OpenWeather_DB.py`        | Defines SQL schema for weather and forecast data             |
+| `JCDecauxAPI_to_DB.py`     | Main parser and DB writer for station & availability records |
+| `OpenWeatherAPI_to_DB.py`  | Fetches and writes current & forecast weather data           |
 
 ---
 
 ## Test Files & Purpose
 
-Test code is located in the `/tests` directory (outside of `app/`). Each test file directly targets one of the modules above.
+Each of the following tests is stored in `/tests/database/` and is run independently from a live DB, using mocks:
 
-| Test File                      | What It Tests                                                            |
-|-------------------------------|---------------------------------------------------------------------------|
-| `test_jcdecaux_db.py`         | Ensures station and availability table creation statements execute       |
-| `test_openweather_db.py`      | Verifies table creation for weather and forecast tables                  |
-| `test_jcdecauxapi_to_db.py`   | Tests station insertion logic and always-insert availability logic       |
-| `test_openweatherapi_to_db.py`| Tests integration of station and weather data with insert verification   |
-| `test_jcdecauxapi_to_file.py`  | Validates transformation and local writing logic for station data       |
-| `test_openweatherapi_to_file.py` | Verifies weather API response handling and record simulation            |
+| Test File                         | Purpose                                                                 |
+|----------------------------------|-------------------------------------------------------------------------|
+| `test_jcdecaux_db.py`            | Tests that station and availability table SQL creation can be invoked |
+| `test_jcdecauxapi_to_db.py`      | Validates station insertion and availability insertions from JSON     |
+| `test_jcdecauxapi_to_file.py`    | Tests fallback file output if DB engine is unavailable  (necessary for 12hr local file scraping)               |
+| `test_openweather_db.py`         | Verifies table creation logic for current_weather and daily_forecast   |
+| `test_openweatherapi_to_db.py`   | Tests correct parsing of API responses and their insertion into tables |
+| `test_openweatherapi_to_file.py` | Simulates offline behavior and confirms record generation     (necessary for 12hr local file scraping)         |
 
-Each test mocks the SQLAlchemy `engine.connect()` call to prevent any live database interaction.
+Each of these test files mocks the SQLAlchemy `engine.begin()` or database execution logic to keep tests fast and decoupled from infrastructure.
 
 ---
 
 ## How to Run the Tests
 
-From the project root, to run Amazon RDS tests:
+To run all database-related unit tests from the project root:
 
 ```bash
-python3 -m unittest tests/test_jcdecaux_db.py
-python3 -m unittest tests/test_openweather_db.py
-python3 -m unittest tests/test_jcdecauxapi_to_db.py
-python3 -m unittest tests/test_openweatherapi_to_db.py
-```
-
-From the project root, to run all tests applicable without RDS (recommended):
-
-```bash
-python3 -m unittest tests/test_jcdecauxapi_to_file.py
-python3 -m unittest tests/test_openweatherapi_to_file.py
-```
+python -m unittest tests/database/test_jcdecaux_db.py
+python -m unittest tests/database/test_jcdecauxapi_to_db.py
+python -m unittest tests/database/test_jcdecauxapi_to_file.py
+python -m unittest tests/database/test_openweather_db.py
+python -m unittest tests/database/test_openweatherapi_to_db.py
+python -m unittest tests/database/test_openweatherapi_to_file.py
 
 ---
 
@@ -79,4 +73,4 @@ The adapted database testing approach guarantees:
 - Integration with local storage works in place of a live DB
 - No loss of test coverage despite cloud service suspension
 
-These tests are lightweight, mock-driven, and ready for continuous integration or future upgrade when the DB is restored.
+These tests are lightweight, mock-driven, and ready for continuous integration or future upgrade.
