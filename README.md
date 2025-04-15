@@ -25,7 +25,7 @@ This project is designed to provide a dynamic and interactive web application th
 - Tully, Mark: [Github](https://github.com/mtully-64)
 
 ## Teamwork documents
-- [Prouctbacklog](https://docs.google.com/spreadsheets/d/16UwcQbcadPkZ1scV0lyiCs6AiAEB3XSC/edit?usp=drive_link&ouid=112237875983919582220&rtpof=true&sd=true)
+- [Productbacklog](https://docs.google.com/spreadsheets/d/16UwcQbcadPkZ1scV0lyiCs6AiAEB3XSC/edit?usp=drive_link&ouid=112237875983919582220&rtpof=true&sd=true)
 - [Prototype](https://docs.google.com/document/d/18HzMUOzncuRlrWLbt86iPlJQJVkGYof_qcaVSPj_3qQ/edit?usp=drive_link)
 - [Final-Report](https://docs.google.com/document/d/1rypzkfCm6ORaso-Ue8xvx0rVFUfZegF0/edit?usp=drive_link&ouid=112237875983919582220&rtpof=true&sd=true)
 - Agile development sprint
