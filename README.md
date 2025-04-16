@@ -178,6 +178,7 @@ Access the predictions section to see forecasted station occupancy based on the 
 ### Test Structure
 - `tests/database/`: Unit tests for data ingestion scripts (with SQLAlchemy mocking)
 - `tests/app/`: Flask app route/API tests using `unittest` and `test_client`
+- `tests/machine_learning/`: Tests for the machine learning model loading, input validation, and prediction output
 - `tests/test_suite.py`: Central test runner for combining all test cases
 
 ### Run All Tests
